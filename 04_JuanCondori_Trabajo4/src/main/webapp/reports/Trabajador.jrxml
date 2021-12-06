@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Trabajador" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df58807e-803c-442b-932f-5bf87349575e">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ORACLEConflomark"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="507"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="484"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT "REPORTEMPLEADO"."IDEMP",
+	"REPORTEMPLEADO"."EMPLEADO",
+	"REPORTEMPLEADO"."EMAEMP",
+	"REPORTEMPLEADO"."DNIEMP",
+	"REPORTEMPLEADO"."CELEMP",
+	"REPORTEMPLEADO"."ROLEMP",
+	"REPORTEMPLEADO"."ESTEMP"
+FROM "REPORTEMPLEADO"
+ORDER BY "REPORTEMPLEADO"."ROLEMP" DESC]]>
+	</queryString>
+	<field name="IDEMP" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IDEMP"/>
+		<property name="com.jaspersoft.studio.field.label" value="IDEMP"/>
+	</field>
+	<field name="EMPLEADO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="EMPLEADO"/>
+		<property name="com.jaspersoft.studio.field.label" value="EMPLEADO"/>
+	</field>
+	<field name="EMAEMP" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="EMAEMP"/>
+		<property name="com.jaspersoft.studio.field.label" value="EMAEMP"/>
+	</field>
+	<field name="DNIEMP" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DNIEMP"/>
+		<property name="com.jaspersoft.studio.field.label" value="DNIEMP"/>
+	</field>
+	<field name="CELEMP" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CELEMP"/>
+		<property name="com.jaspersoft.studio.field.label" value="CELEMP"/>
+	</field>
+	<field name="ROLEMP" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ROLEMP"/>
+		<property name="com.jaspersoft.studio.field.label" value="ROLEMP"/>
+	</field>
+	<field name="ESTEMP" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ESTEMP"/>
+		<property name="com.jaspersoft.studio.field.label" value="ESTEMP"/>
+	</field>
+	<variable name="ROLEMP1" class="java.lang.Integer" resetType="Group" resetGroup="Rol" calculation="Count">
+		<variableExpression><![CDATA[$F{ROLEMP}]]></variableExpression>
+	</variable>
+	<variable name="ROLEMP2" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{ROLEMP}]]></variableExpression>
+	</variable>
+	<group name="Rol">
+		<groupExpression><![CDATA[$F{ROLEMP}]]></groupExpression>
+		<groupHeader>
+			<band height="59">
+				<rectangle>
+					<reportElement x="360" y="38" width="191" height="21" uuid="d8eacd43-6499-4158-9df1-31e314d89267"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="264" y="38" width="96" height="21" uuid="da13485b-d649-4744-8cf3-f7d9a7a31aac"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="189" y="38" width="75" height="21" uuid="1f86d94d-2ade-4b72-9873-b36111050233"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="24" y="38" width="165" height="21" uuid="d0991437-e50a-4d1f-8314-52a0fd250512"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="1" y="38" width="23" height="21" uuid="e6acc18e-51e0-4e17-b418-a79210ac597d"/>
+				</rectangle>
+				<textField>
+					<reportElement x="53" y="11" width="118" height="20" uuid="cb43d7a8-6ca4-48e4-8361-7c26f68b3033"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ROLEMP}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="13" y="11" width="40" height="20" uuid="832cf89f-1d0e-4e42-b718-8f9b7750fa3e"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cargo:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="26" y="39" width="159" height="20" uuid="d70bc0b4-fde5-4f3d-b1ac-1a649fac14a7"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Empleado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="198" y="39" width="51" height="20" uuid="413396a5-f7dc-4108-a0f4-a4d3098a8d7a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[DNI]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="275" y="38" width="70" height="20" uuid="3e50c708-eb9e-4d5e-bfc5-f8f88dc29aff"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Celular]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="373" y="39" width="164" height="20" uuid="dd2ff8f0-f509-4def-844c-1c157430bc9a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Email]]></text>
+				</staticText>
+				<line>
+					<reportElement x="1" y="30" width="553" height="1" uuid="41590ec6-4d5f-4e3b-b8b6-94b0f354408a">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+				</line>
+				<staticText>
+					<reportElement x="2" y="39" width="20" height="20" uuid="90738adc-d7c0-4edb-97b1-4a83fc868749"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nº
+]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band height="10" splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<staticText>
+				<reportElement x="230" y="22" width="314" height="30" uuid="895d7a3b-994d-4c1e-aa46-fbe1f5b60f4d"/>
+				<textElement textAlignment="Center">
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Empleados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="52" width="80" height="16" uuid="d03a3569-4183-40af-a250-b7f77a859b22"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Actualizado al: ]]></text>
+			</staticText>
+			<textField pattern="dd/M/yy h:mm a">
+				<reportElement x="380" y="52" width="100" height="16" uuid="0e3f1d90-fccb-4dac-a546-a0578b86e71e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="13" y="6" width="207" height="70" uuid="c852aa36-f858-4a60-88a2-1e134eef67de"/>
+				<imageExpression><![CDATA["Logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<rectangle>
+				<reportElement x="360" y="0" width="191" height="18" uuid="0b1163a1-5a91-4429-9de5-4d5e42c30a4d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="264" y="0" width="96" height="18" uuid="3745aa2c-319e-4bdf-9ca7-36d712948437"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="188" y="0" width="75" height="18" uuid="f6b0639b-de37-4b85-82d3-6798d5c75337"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="24" y="0" width="165" height="18" uuid="927977b3-3532-4dcf-a7c8-6764319230d3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="0" width="23" height="18" uuid="d136ac8d-daad-4e12-8f36-0b47dafec446"/>
+			</rectangle>
+			<textField>
+				<reportElement x="26" y="0" width="159" height="18" uuid="8e67c6d2-057b-426a-b9d0-6ee5a8daa826"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{EMPLEADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="0" width="164" height="18" uuid="58beb939-a358-4694-ba83-af92efe85448"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{EMAEMP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="194" y="0" width="63" height="18" uuid="c9e2557e-59d6-401b-815b-b6e54943e19f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DNIEMP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="276" y="0" width="70" height="18" uuid="ab61ab46-c938-442e-9470-83dd1401f8f5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CELEMP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="20" height="18" uuid="98f20e00-cceb-4652-bbca-c3f64edb9d5e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{Rol_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement x="60" y="4" width="18" height="20" uuid="051ebee7-d4cc-446e-9cef-1b282976f1e2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="4" width="52" height="20" uuid="3d506c16-e326-463f-b89d-82e1b2b7f9ac"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Página Nº:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-1" y="2" width="553" height="1" uuid="11832ba4-8f75-4e3f-b10a-524a2ac6685c">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

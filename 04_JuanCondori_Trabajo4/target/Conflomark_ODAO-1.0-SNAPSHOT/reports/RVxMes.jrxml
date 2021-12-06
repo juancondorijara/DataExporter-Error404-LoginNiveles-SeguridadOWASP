@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RVxMes" pageWidth="420" pageHeight="595" columnWidth="380" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7539a34e-98f2-439c-a094-871a2c8c315c">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ORACLEConflomark"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT "RVXMES"."Total",
+	"RVXMES"."Empleado",
+	"RVXMES"."Año",
+	"RVXMES"."MES"
+FROM "RVXMES"]]>
+	</queryString>
+	<field name="Total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total"/>
+	</field>
+	<field name="Empleado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Empleado"/>
+		<property name="com.jaspersoft.studio.field.label" value="Empleado"/>
+	</field>
+	<field name="Año" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Año"/>
+		<property name="com.jaspersoft.studio.field.label" value="Año"/>
+	</field>
+	<field name="MES" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MES"/>
+		<property name="com.jaspersoft.studio.field.label" value="MES"/>
+	</field>
+	<variable name="Total1" class="java.math.BigDecimal" resetType="Group" resetGroup="Mes" calculation="Sum">
+		<variableExpression><![CDATA[$F{Total}]]></variableExpression>
+	</variable>
+	<group name="Mes">
+		<groupExpression><![CDATA[$F{MES}]]></groupExpression>
+		<groupHeader>
+			<band height="57">
+				<rectangle>
+					<reportElement x="255" y="30" width="123" height="27" uuid="1f2a01d3-ed0e-4093-86b1-44f43da50ba1"/>
+				</rectangle>
+				<textField>
+					<reportElement x="50" y="10" width="140" height="20" uuid="d761a707-9e84-4aad-9283-7c2ac16ff55a"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MES} + " / " + $F{Año}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="10" y="10" width="30" height="20" uuid="97773c19-6ecc-4933-9e7a-8ce0aec71f83"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Mes:]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement x="0" y="30" width="255" height="27" uuid="a03df150-438c-4f64-942b-e4bd9dcc6252"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="34" width="243" height="20" uuid="0751d765-d1e7-4cab-b9c7-2eb0a5157cc4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Empleado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="260" y="34" width="110" height="20" uuid="27b6da61-f2bb-4752-89c6-90f8d0f2bb3b"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="24">
+				<rectangle>
+					<reportElement x="255" y="0" width="123" height="24" uuid="2ec5e2c7-2ab5-480c-8166-035ee709dd65"/>
+				</rectangle>
+				<textField>
+					<reportElement x="260" y="3" width="110" height="18" uuid="d5ad477a-c88e-41de-9d7e-a965761639a1"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{Total1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="93" splitType="Stretch">
+			<textField pattern="dd/M/yy h:mm a">
+				<reportElement x="260" y="40" width="110" height="20" uuid="6b62d667-e6ea-42de-bbb9-8804becb8f8a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="160" y="20" width="210" height="20" uuid="34620908-a02e-4f04-bb78-f104a58c3aa2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte ranking de ventas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="40" width="100" height="20" uuid="53ed658e-a22a-45cc-a777-cc3aaf4f84d8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Actualizado al:]]></text>
+			</staticText>
+			<image>
+				<reportElement x="7" y="10" width="150" height="60" uuid="702d3c51-475d-46cb-9208-52b4d8ae9f53"/>
+				<imageExpression><![CDATA["Logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<rectangle>
+				<reportElement x="255" y="0" width="123" height="24" uuid="c99e5193-8c86-4704-99c6-3d0136211bbf"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="255" height="24" uuid="138d1e8a-8e26-4e03-aa2a-303c59b421d9"/>
+			</rectangle>
+			<textField>
+				<reportElement x="7" y="4" width="243" height="16" uuid="67ccc0bc-bc34-4820-84b4-8adcc3aacfb9"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Empleado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="4" width="110" height="16" uuid="e5258308-8361-4a8c-946a-85bcd168c6dc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

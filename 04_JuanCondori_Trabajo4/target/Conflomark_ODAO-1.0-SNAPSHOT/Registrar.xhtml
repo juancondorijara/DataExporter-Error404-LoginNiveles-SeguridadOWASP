@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Login CONFLOMARK</title>
+        <link rel="icon" type="image/png" href="resources/images/carrito.png"/>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="./resources/css/login.css"/>
+        <script type="text/javascript" src="./resources/js/validator.js"></script>
+    </h:head>
+    <p:growl id="mensajes" severity="info,fatal,warn,error" showSummary="true" showDetail="true"/>
+
+    <h:body id="body">
+        <style>
+           a:link{color:red}
+           a:hover{color:blue}
+           a:visited{color:blue}
+        </style>
+        <div class="container">
+            <div class="forms-container">
+                <div class="signin-signup">
+                    <h:form id="fmrIngresar" class="sign-in-form" prependId="false">
+                        <h1 class="title" style="color:black; font-weight:bold; font-size:40px">¡REGISTRATE!</h1>
+                        <div class="page-links">
+                            <a href="/Conflomark_ODAO/faces/Login.xhtml">Iniciar Sesión</a> | <a class="active">Registrarse</a> | <a href="/Conflomark_ODAO/faces/Comentario.xhtml">Ayuda</a>
+                        </div>
+                        <p:panelGrid columns="3" styleClass="ui-noborder">
+                            <p:outputLabel value="DNI" for="dni" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:commandButton value="Buscar" actionListener="#{clienteC.buscarDNI()}" update="nombres apellidos direccion email celular distrito mensajes"
+                                             icon="pi pi-search" style="font-weight:bold; font-size:16px">
+                                <p:inputText id="dni" value="#{clienteC.cliente.DNICLI}" onkeyup="validarDNI()" maxlength="8" style="width:100px;" required="true" requiredMessage="Ingrese el DNI">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                    <f:validator validatorId="dniV"/>
+                                    <p:ajax update="msgDni" event="keyup" delay="800"/>
+                                    <p:tooltip for="dni" value="Ingrese el DNI" trackMouse="focus"/>
+                                </p:inputText>
+                            </p:commandButton>
+                            <p:message id="msgDni" for="dni"/>
+                            
+                            <p:outputLabel value="Nombres" for="nombres" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="nombres" value="#{clienteC.cliente.NOMCLI}" maxlength="50" style="width:270px;" requiredMessage="Ingrese los Nombres" widgetVar="txtnombres">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                <p:ajax update="msgNombres" event="keyup" delay="800"/>
+                                <p:tooltip for="nombres" value="Ingrese los Nombres" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgNombres" for="nombres"/>
+                            <p:outputLabel value="Apellidos" for="apellidos" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="apellidos" value="#{clienteC.cliente.APECLI}" maxlength="50" style="width:270px;" requiredMessage="Ingrese los Apellidos" widgetVar="txtapellidos">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                <p:ajax update="msgApellidos" event="keyup" delay="800"/>
+                                <p:tooltip for="apellidos" value="Ingrese los Apellidos" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgApellidos" for="apellidos"/>
+                            <p:outputLabel value="Dirección" for="direccion" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="direccion" value="#{clienteC.cliente.DIRCLI}" maxlength="80" style="width:270px;" requiredMessage="Ingrese la Dirección">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_:_._ ]/"/>
+                                <p:ajax update="msgDireccion" event="keyup" delay="800"/>
+                                <p:tooltip for="direccion" value="Ingrese la Dirección" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgDireccion" for="direccion"/>
+                            <p:outputLabel value="Email" for="ema" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="ema" value="#{clienteC.cliente.EMACLI}" maxlength="50" style="width:270px;" requiredMessage="Ingrese el Email">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_._@]/"/>
+                                <f:validator validatorId="emailV"/>
+                                <p:ajax update="msgEmail" event="keyup" delay="800"/>
+                                <p:tooltip for="ema" value="Ingrese el Email" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgEmail" for="ema"/>
+                            <p:outputLabel value="Celular" for="celular" style="color:black; font-weight:bold; font-size:16px"/> 
+                            <p:inputText id="celular" value="#{clienteC.cliente.CELCLI}" onkeyup="validarCelular()" maxlength="9" style="width:170px;" requiredMessage="Ingrese el Celular">
+                                <p:keyFilter regEx="/[0-9]/"/>
+                                <f:validator validatorId="celularV"/>
+                                <p:ajax update="msgCelular" event="keyup" delay="800"/>
+                                <p:tooltip for="celular" value="Ingrese el Celular" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgCelular" for="celular"/>
+                            <p:outputLabel value="Distrito" for="distrito" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:selectOneMenu id="distrito" value="#{clienteC.cliente.CODUBI}" style="width:270px" filter="true" filterMatchMode="contains" requiredMessage="Seleccione el Distrito">
+                                <f:selectItem noSelectionOption="true" itemLabel="Seleccione" itemValue="#{null}"/>
+                                <f:selectItems value="#{ubigeoC.listadoUbigeo}" var="ubige"
+                                               itemValue="#{ubige.CODUBI}"
+                                               itemLabel="#{ubige.DISUBI}"/>
+                            </p:selectOneMenu>
+                            <p:message id="msgDistrito" for="distrito"/>
+                            <p:commandButton id="registrar" value="REGISTRAR" actionListener="#{clienteC.registrar()}" icon="pi pi-save" disabled="false" style="font-weight:bold; font-size:16px"
+                                             update="fmrIngresar mensajes msgDni msgNombres msgApellidos msgDireccion msgEmail msgCelular msgDistrito" widgetVar="btnregistrar">
+                                <p:confirm header="Confirmación" type="popup" message="¿Deseas Registrar?" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="LIMPIAR" update="fmrIngresar mensajes" actionListener="#{clienteC.limpiar()}" icon="pi pi-times" style="font-weight:bold; font-size:16px"/>
+                        </p:panelGrid>
+                    </h:form>
+
+                    <h:form id="frmRegistrar" class="sign-up-form" prependId="false">
+                        <img src="./resources/images/Conflomark.png" class="image" alt="" style="width:60%; height:40%;"/>
+                        <h1 class="title" style="color:black; font-weight:bold; font-size:40px">RESTABLECER CONTRASEÑA</h1>
+                        <h1 class="title" style="color:black; font-weight:bold; font-size:18px">Escribe aqui tu email para enviarte una nueva contraseña</h1>
+                        <center>
+                            <div class="input-field">
+                                <i class="pi pi-envelope"></i>
+                                <p:inputText id="email" value="#{usuarioC.usuario.EMACLI}" placeholder="Email" style="width:400px;" required="true" requiredMessage="Ingrese el Email">
+                                </p:inputText>
+                            </div>
+                            <p:panelGrid columns="1" styleClass="ui-noborder">
+                                <p:commandButton id="enviar" value="ENVIAR EMAIL" actionListener="#{usuarioC.modificarPwdGeneral()}" icon="pi pi-envelope" 
+                                                 disabled="false" style="font-weight:bold; font-size:20px" widgetVar="btnemail" update="email mensajes">
+                                    <p:confirm header="Confirmación" type="popup" message="¿Deseas Enviar?" icon="pi pi-question"/>
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </center>
+                    </h:form>
+
+                    <h:form>
+                        <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                        </p:confirmPopup>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                        </p:confirmDialog>
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="panels-container">
+                <div class="panel left-panel">
+                    <div class="content">
+                        <h3>¿Olvidaste tu Contraseña?</h3>
+                        <p>Te podemos ayudar a restablecer tu contraseña</p>
+                        <button class="btn transparent" id="sign-up-btn">OLVIDE MI CONTRASEÑA</button>
+                    </div>
+                    <img src="./resources/images/registrarse.svg" class="image" alt=""/>
+                </div>
+
+                <div class="panel right-panel">
+                    <div class="content">
+                        <h3>¿Eres un usuario?</h3>
+                        <p>Si lo eres haz clic en Iniciar Sesión</p>
+                        <button class="btn transparent" id="sign-in-btn">INICIAR SESIÓN</button>
+                    </div>
+                    <img src="./resources/images/sesion.svg" class="image" alt=""/>
+                </div>
+            </div>
+        </div>
+        <script src="./resources/js/login.js"></script>
+    </h:body>
+
+</html>

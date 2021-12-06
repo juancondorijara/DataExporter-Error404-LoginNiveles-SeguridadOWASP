@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="content">
+        <h:head>
+            <f:event listener="#{comentarioC.listar()}" type="preRenderView"/>
+        </h:head>
+        <p:growl id="mensajes" severity="info,fatal" showSummary="true" showDetail="true"/>
+
+        <h:body>
+
+            <div>
+                <center>
+                    <h:form id="opciones">
+                        <h1 style="color:black; font-weight:bold; font-size:40px">LISTA DE COMENTARIOS</h1>
+                    </h:form>
+                </center>
+            </div>
+            
+            <div class="card" style="margin-left: 50px; margin-right: 50px">
+                <h:form id="form2">
+                    <center>
+                        <p:dataTable id="tablaPro" var="tblpro" value="#{comentarioC.listadoComentario}" selection="#{comentarioC.comentario}"
+                                     selectionMode="single" rowKey="#{tblpro.IDCOM}" resizableColumns="true"
+                                     paginator="false" rows="5" widgetVar="tblProducto"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,15,{ShowAll|'All'}" style="width: 80%; border-style: double;">
+
+                            <div class="p-p-3">
+                                <p:column style="width:40px; color: black;" headerText="">
+                                    <div style="float: left; width:150px;">
+                                        <p:graphicImage name="images/sinfoto.png" style="width:70%;height:50%;"/>
+                                    </div>
+                                    <div>
+                                        <h:outputText value="#{tblpro.ASUNCOM}" styleClass="p-text-bold p-d-block" style="color: black; font-weight:bold; font-size: 20px"/>
+                                        <br/>
+                                        <br/>
+                                        <h:outputText value="#{tblpro.MSGCOM}" escape="false"/>
+                                        <br/>
+                                        <br/>
+                                        <p:rating value="#{comentarioC.estrellas}">
+                                            <p:ajax event="rate" listener="#{comentarioC.activarStar}" update="mensajes"/>
+                                            <p:ajax event="cancel" listener="#{comentarioC.desactivarStar}" update="mensajes"/>
+                                        </p:rating>
+                                        <p:divider/>
+                                    </div>
+                                </p:column>
+                            </div>
+
+                            <f:facet name="footer">
+                                <center style="color: black; font-weight:bold; font-size: 20px">
+                                    EN TOTAL HAY #{fn:length(comentarioC.listadoComentario)} COMENTARIOS
+                                </center>
+                            </f:facet>
+                        </p:dataTable>
+                    </center>
+                </h:form>
+
+                <h:form id="form4">
+                    <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                    </p:confirmPopup>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                    </p:confirmDialog>
+                </h:form>
+            </div>
+        </h:body>
+    </ui:define>
+
+</ui:composition>

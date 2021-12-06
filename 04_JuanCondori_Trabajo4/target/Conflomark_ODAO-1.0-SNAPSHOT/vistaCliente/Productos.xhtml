@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="content">
+        <h:head>
+            <f:event listener="#{productoC.listar()}" type="preRenderView"/>
+        </h:head>
+        <p:growl id="mensajes" severity="info,fatal" showSummary="true" showDetail="true"/>
+
+        <h:body>
+            <p:growl id="mensaje" showDetail="true" />
+            <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+            <div>
+                <center>
+                    <h:form id="opciones">
+                        <h1 style="color:black; font-weight:bold; font-size:40px">LISTA DE PRODUCTOS</h1>
+                    </h:form>
+                </center>
+            </div>
+
+            <div class="card" style="margin-left: 50px; margin-right: 50px">
+                <h:form id="form2">
+                    <center>
+                        <p:dataTable id="tablaPro" var="tblpro" value="#{productoC.listadoProducto}" selection="#{productoC.producto}"
+                                     selectionMode="single" rowKey="#{tblpro.IDPRO}" resizableColumns="true"
+                                     paginator="true" rows="5" widgetVar="tblProducto"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,15,{ShowAll|'All'}" style="width: 100%; border-style: none;">
+                            <f:facet name="header">
+                                <div style="float: left">
+                                    <h:form>
+                                        <p:outputLabel value="FILTRO POR: " style="color: black; font-weight:bold"/>
+                                        <center>
+                                            <p:selectOneMenu value="#{productoC.tipo}" style="width: 100px">
+                                                <f:selectItem itemLabel="Activos" itemValue="1"/>
+                                                <f:selectItem itemLabel="Inactivos" itemValue="2"/>
+                                                <f:selectItem itemLabel="Todos" itemValue="3"/>
+                                                <p:ajax listener="#{productoC.listar()}" update=":form2:tablaPro"/>
+                                            </p:selectOneMenu>
+                                        </center>
+                                    </h:form>
+                                </div>
+                                <div style="float: right">
+                                    <p:commandButton value="PRODUCTO MÁS VENDIDO" actionListener="#{productoC.productoMasVendido()}" update="mensajes" ajax="false" icon="pi pi-file-pdf"
+                                                     onclick="this.form.target = '_blank'" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                    </p:commandButton>
+                                    <p:commandButton value="REPORTE" actionListener="#{productoC.reporteProducto()}" update="mensajes" ajax="false" icon="pi pi-file-pdf"
+                                                     onclick="this.form.target = '_blank'" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                    </p:commandButton>
+                                    <p:commandButton value="EXCEL" icon="pi pi-file-excel" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                        <p:dataExporter type="xls" target=":form2:tablaPro" fileName="Lista de Productos_XLS" options="#{productoC.xls}" />
+                                    </p:commandButton>
+                                </div>
+                                <br/>
+                            </f:facet>
+                            <f:facet name= "header"><center style="color: black; font-weight:bold; font-size: 25px">LISTA DE PRODUCTOS</center></f:facet>
+                            <p:column style="width:70px; color: black" headerText="MARCA" filterBy="#{tblpro.MARPRO}">
+                                <h:outputText value="#{tblpro.MARPRO}"/>
+                            </p:column>
+                            <p:column style="width:160px; color: black" headerText="SUBFAMILIA" filterBy="#{tblpro.SUBFAM}">
+                                <h:outputText value="#{tblpro.SUBFAM} - #{tblpro.NOMFAM}"/>
+                            </p:column>
+                            <p:column style="width:180px; color: black" headerText="PRESENTACIÓN" filterBy="#{tblpro.PRESPRO}">
+                                <h:outputText value="#{tblpro.PRESPRO}"/>
+                            </p:column>
+                            <p:column style="width:180px; color: black" headerText="DESCRIPCIÓN" filterBy="#{tblpro.DESPRO}">
+                                <h:outputText value="#{tblpro.DESPRO}"/>
+                            </p:column>
+                            <p:column style="width:40px; color: black" headerText="PRECIO" filterBy="#{tblpro.PREPRO}">
+                                <h:outputText value="#{tblpro.PREPRO}">
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:40px; color: black" headerText="STOCK" filterBy="#{tblpro.STOPRO}">
+                                <h:outputText value="#{tblpro.STOPRO}">
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:100px; color: black" headerText="VENCIMIENTO" filterBy="#{tblpro.VENPRO}">
+                                <h:outputText value="#{tblpro.VENPRO}">
+                                    <f:converter converterId="fechaConverter"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:180px; color: black" headerText="PROVEEDOR" filterBy="#{tblpro.NOMPROV}">
+                                <h:outputText value="#{tblpro.NOMPROV}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <center style="color: black; font-weight:bold; font-size: 20px">
+                                    EN TOTAL HAY #{fn:length(productoC.listadoProducto)} REGISTROS
+                                </center>
+                            </f:facet>
+                        </p:dataTable>
+                    </center>
+                </h:form>
+
+                <h:form id="form4">
+                    <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                    </p:confirmPopup>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                    </p:confirmDialog>
+                </h:form>
+            </div>
+        </h:body>
+    </ui:define>
+
+</ui:composition>

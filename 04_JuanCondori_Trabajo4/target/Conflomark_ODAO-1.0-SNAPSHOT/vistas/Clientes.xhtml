@@ -1,0 +1,260 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="content">
+        <h:head>
+            <f:event listener="#{clienteC.listar()}" type="preRenderView"/>
+        </h:head>
+        <p:growl id="mensajes" severity="info,fatal" showSummary="true" showDetail="true"/>
+
+        <h:body>
+            <p:growl id="mensaje" showDetail="true"/>
+            <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+            <div>
+                <center>
+                    <h:form id="opciones">
+                        <h1 style="color:black; font-weight:bold; font-size:40px">REGISTRO DE CLIENTES</h1>
+                        <p:panelGrid columns="1">
+                            <p:commandButton value="Registrar" icon="pi pi-user-plus" oncomplete="PF('wdlgRegistrar').show();" style="font-size:25px; font-weight:bold"/>
+                        </p:panelGrid>
+                    </h:form>
+                </center>
+            </div>
+
+            <h:form id="form" prependId="false">
+                <center>
+                    <p:dialog id="dlgDatos" header="REGISTRO DE CLIENTE" widgetVar="wdlgRegistrar" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false" minimizable="false" maximizable="false">
+                        <p:ajax event="close" listener="${clienteC.limpiar()}" update="form"/>
+                        <p:panelGrid columns="3" styleClass="ui-noborder">
+                            <p:outputLabel value="DNI" for="dni" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:commandButton value="Buscar" actionListener="#{clienteC.buscarDNI()}" update="nombres apellidos direccion email celular distrito mensajes"
+                                             icon="pi pi-search" style="font-weight:bold; font-size:16px">
+                                <p:inputText id="dni" value="#{clienteC.cliente.DNICLI}" onkeyup="validarDNI()" maxlength="8" style="width:100px;" required="true" requiredMessage="Ingrese el DNI">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                    <f:validator validatorId="dniV"/>
+                                    <!--<p:ajax listener="#{clienteC.buscarDNI()}" update="nombres apellidos mensajes"/>-->
+                                    <p:ajax update="msgDni" event="keyup" delay="800"/>
+                                    <p:tooltip for="dni" value="Ingrese el DNI" trackMouse="focus"/>
+                                </p:inputText>
+                            </p:commandButton>
+                            <p:message id="msgDni" for="dni"/>
+                            <p:outputLabel value="Nombres" for="nombres" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="nombres" value="#{clienteC.cliente.NOMCLI}" maxlength="50" style="width:270px;" requiredMessage="Ingrese los Nombres" widgetVar="txtnombres" disabled="#{clienteC.enabled}">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                <p:ajax update="msgNombres" event="keyup" delay="800"/>
+                                <p:tooltip for="nombres" value="Ingrese los Nombres" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgNombres" for="nombres"/>
+                            <p:outputLabel value="Apellidos" for="apellidos" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="apellidos" value="#{clienteC.cliente.APECLI}" maxlength="50" style="width:270px;" requiredMessage="Ingrese los Apellidos" widgetVar="txtapellidos" disabled="#{clienteC.enabled}">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                <p:ajax update="msgApellidos" event="keyup" delay="800"/>
+                                <p:tooltip for="apellidos" value="Ingrese los Apellidos" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgApellidos" for="apellidos"/>
+                            <p:outputLabel value="Dirección" for="direccion" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="direccion" value="#{clienteC.cliente.DIRCLI}" maxlength="80" style="width:270px;" requiredMessage="Ingrese la Dirección">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_:_._ ]/"/>
+                                <p:ajax update="msgDireccion" event="keyup" delay="800"/>
+                                <p:tooltip for="direccion" value="Ingrese la Dirección" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgDireccion" for="direccion"/>
+                            <p:outputLabel value="Email" for="email" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="email" value="#{clienteC.cliente.EMACLI}" maxlength="50" style="width:270px;" requiredMessage="Ingrese el Email">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_._@]/"/>
+                                <f:validator validatorId="emailV"/>
+                                <p:ajax update="msgEmail" event="keyup" delay="800"/>
+                                <p:tooltip for="email" value="Ingrese el Email" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgEmail" for="email"/>
+                            <p:outputLabel value="Celular" for="celular" style="color:black; font-weight:bold; font-size:16px"/> 
+                            <p:inputText id="celular" value="#{clienteC.cliente.CELCLI}" onkeyup="validarCelular()" maxlength="9" style="width:170px;" requiredMessage="Ingrese el Celular">
+                                <p:keyFilter regEx="/[0-9]/"/>
+                                <f:validator validatorId="celularV"/>
+                                <p:ajax update="msgCelular" event="keyup" delay="800"/>
+                                <p:tooltip for="celular" value="Ingrese el Celular" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgCelular" for="celular"/>
+                            <p:outputLabel value="Distrito" for="distrito" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:selectOneMenu id="distrito" value="#{clienteC.cliente.CODUBI}" style="width:270px" filter="true" filterMatchMode="contains" requiredMessage="Seleccione el Distrito">
+                                <f:selectItem noSelectionOption="true" itemLabel="Seleccione" itemValue="#{null}"/>
+                                <f:selectItems value="#{ubigeoC.listadoUbigeo}" var="ubigeo"
+                                               itemValue="#{ubigeo.CODUBI}"
+                                               itemLabel="#{ubigeo.DISUBI} - #{ubigeo.PROUBI} - #{ubigeo.DEPUBI}"/>
+                            </p:selectOneMenu>
+                            <p:message id="msgDistrito" for="distrito"/>
+                            <p:commandButton id="registrar" value="Registrar" actionListener="#{clienteC.registrar()}" icon="pi pi-save" disabled="false" style="font-weight:bold; font-size:16px"
+                                             update=":form2:tablaCli mensajes msgDni msgNombres msgApellidos msgDireccion msgEmail msgCelular msgDistrito" widgetVar="btnregistrar">
+                                <p:confirm header="Confirmación" type="popup" message="¿Deseas Registrar?" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" immediate="true" oncomplete="PF('wdlgRegistrar').hide();" style="font-weight:bold; font-size:16px"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </center>
+            </h:form>
+
+            <div class="card" style="margin-left:50px; margin-right:50px">
+                <h:form id="form2">
+                    <center>
+                        <p:dataTable id="tablaCli" var="tblcli" value="#{clienteC.listadoCliente}" selection="#{clienteC.cliente}"
+                                     selectionMode="single" rowKey="#{tblcli.IDCLI}" resizableColumns="true"
+                                     paginator="true" rows="5" widgetVar="tblCliente" styleClass="ui-yesborder"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,15,{ShowAll|'All'}" style="width:95%; border-style:none;">
+                            <f:facet name="header">
+                                <div style="float:left">
+                                    <h:form>
+                                        <p:outputLabel value="FILTRO POR: " style="color:black; font-weight:bold"/>
+                                        <center>
+                                            <p:selectOneMenu value="#{clienteC.tipo}" style="width:100px">
+                                                <f:selectItem itemLabel="Activos" itemValue="1"/> 
+                                                <f:selectItem itemLabel="Inactivos" itemValue="2"/>
+                                                <f:selectItem itemLabel="Todos" itemValue="3"/>
+                                                <p:ajax listener="#{clienteC.listar()}" update=":form2:tablaCli"/>
+                                            </p:selectOneMenu>
+                                        </center>
+                                    </h:form>
+                                </div>
+                                <div style="float:right">
+                                    <p:commandButton value="COMPRAS POR CLIENTE" actionListener="#{clienteC.ventaCliente()}" update="mensajes" ajax="false" icon="pi pi-file-pdf"
+                                                     onclick="this.form.target = '_blank'" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                    </p:commandButton>
+                                    <p:commandButton value="REPORTE" actionListener="#{clienteC.reporteCliente()}" update="mensajes" ajax="false" icon="pi pi-file-pdf"
+                                                     onclick="this.form.target = '_blank'" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                    </p:commandButton>
+                                    <p:commandButton value="EXCEL" icon="pi pi-file-excel" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                        <p:dataExporter type="xls" target=":form2:tablaCli" fileName="Lista de Clientes_XLS" options="#{clienteC.xls}" />
+                                    </p:commandButton>
+                                </div>
+                                <br/>
+                            </f:facet>
+                            <f:facet name= "header"><center style="color:black; font-weight:bold; font-size:25px">LISTA DE CLIENTES</center></f:facet>
+                            <p:column style="width:70px; color:black" headerText="DNI" filterBy="#{tblcli.DNICLI}">
+                                <h:outputText value="#{tblcli.DNICLI}"/>
+                            </p:column>
+                            <p:column style="width:220px; color:black" headerText="NOMBRES Y APELLIDOS" filterBy="#{tblcli.NOMCLI}">
+                                <h:outputText value="#{tblcli.NOMCLI.concat(' ').concat(tblcli.APECLI)}"/>
+                            </p:column>
+                            <p:column style="width:180px; color:black" headerText="EMAIL" filterBy="#{tblcli.EMACLI}">
+                                <h:outputText value="#{tblcli.EMACLI}"/>
+                            </p:column>
+                            <p:column style="width:80px; color:black" headerText="CELULAR" filterBy="#{tblcli.CELCLI}">
+                                <h:outputText value="#{tblcli.CELCLI}"/>
+                            </p:column>
+                            <p:column style="width:180px; color:black" headerText="DIRECCIÓN" filterBy="#{tblcli.DIRCLI}">
+                                <h:outputText value="#{tblcli.DIRCLI}"/>
+                            </p:column>
+                            <p:column style="width:180px; color:black" headerText="DISTRITO" filterBy="#{tblcli.DISUBI}">
+                                <h:outputText value="#{tblcli.DISUBI} - #{tblcli.PROUBI} - #{tblcli.DEPUBI}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <center style="color:black; font-weight:bold; font-size:20px">
+                                    EN TOTAL HAY #{fn:length(clienteC.listadoCliente)} REGISTROS
+                                </center>
+                            </f:facet>
+                        </p:dataTable>
+                    </center>
+                    <p:contextMenu for="tablaCli">
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" oncomplete="PF('wdlgModificar').show()" update=":form3" style="color:black; font-weight:bold; font-size:15px">
+                        </p:menuitem>
+                        <p:menuitem value="Eliminar" icon="pi pi-trash" actionListener="#{clienteC.eliminarEstado()}" update=":form2:tablaCli mensaje" style="color:black; font-weight:bold; font-size:15px">
+                            <p:confirm header="Confirmación" message="¿Deseas eliminar?" icon="pi pi-trash"/>
+                        </p:menuitem>
+                        <p:menuitem value="Restaurar" icon="pi pi-user-plus" actionListener="#{clienteC.restaurarEstado()}" update=":form2:tablaCli mensaje" style="color:black; font-weight:bold; font-size:15px">
+                            <p:confirm header="Confirmación" message="¿Deseas Restaurar?" icon="pi pi-user-plus"/>
+                        </p:menuitem>
+                        <p:menuitem icon="pi pi-briefcase" value="Registrar Producto" outcome="/vistas/Productos" style="color:black; font-weight:bold; font-size:14px"/>
+                        <p:menuitem icon="pi pi-shopping-cart" value="Registrar Venta" outcome="/vistas/Ventas" style="color:black; font-weight:bold; font-size:14px"/>
+                    </p:contextMenu>
+                </h:form>
+
+                <h:form id="form3">
+                    <center>
+                        <p:dialog id="dlgDatos" header="DATOS DEL CLIENTE" widgetVar="wdlgModificar" modal="true"
+                                  showEffect="fade" hideEffect="fade" resizable="false" minimizable="false" maximizable="false">
+                            <p:panelGrid columns="3" styleClass="ui-noborder">
+                                <p:outputLabel value="Nombres" for="nombres" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="nombres" value="${clienteC.cliente.NOMCLI}" maxlength="50" style="width:270px;" required="true" requiredMessage="Ingrese los Nombres">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                    <p:ajax update="msgNombres" event="keyup" delay="800"/>
+                                    <p:tooltip for="nombres" value="Ingrese los Nombres" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgNombres" for="nombres"/>
+                                <p:outputLabel value="Apellidos" for="apellidos" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="apellidos" value="${clienteC.cliente.APECLI}" maxlength="50" style="width:270px;" required="true" requiredMessage="Ingrese los Apellidos">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                    <p:ajax update="msgApellidos" event="keyup" delay="800"/>
+                                    <p:tooltip for="apellidos" value="Ingrese los Apellidos" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgApellidos" for="apellidos"/>
+                                <p:outputLabel value="Dirección" for="direccion" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="direccion" value="${clienteC.cliente.DIRCLI}" maxlength="80" style="width:270px;" required="true" requiredMessage="Ingrese la Dirección">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_:_._ ]/"/>
+                                    <p:ajax update="msgDireccion" event="keyup" delay="800"/>
+                                    <p:tooltip for="direccion" value="Ingrese la Dirección" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgDireccion" for="direccion"/>
+                                <p:outputLabel value="Email" for="email" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="email" value="${clienteC.cliente.EMACLI}" maxlength="50" style="width:270px;" required="true" requiredMessage="Ingrese el Email">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_._@]/"/>
+                                    <p:ajax update="msgEmail" event="keyup" delay="800"/>
+                                    <p:tooltip for="email" value="Ingrese el Email" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgEmail" for="email"/>
+                                <p:outputLabel value="DNI" for="dni" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="dni" value="${clienteC.cliente.DNICLI}" maxlength="8" style="width:150px;" required="true" requiredMessage="Ingrese el DNI">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                    <p:ajax update="msgDni" event="keyup" delay="800"/>
+                                    <p:tooltip for="dni" value="Ingrese el DNI" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgDni" for="dni"/>
+                                <p:outputLabel value="Celular" for="celular" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="celular" value="${clienteC.cliente.CELCLI}" maxlength="9" style="width:150px;" required="true" requiredMessage="Ingrese el Celular">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                    <p:ajax update="msgCelular" event="keyup" delay="800"/>
+                                    <p:tooltip for="celular" value="Ingrese el Celular" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgCelular" for="celular"/>
+                                <p:outputLabel value="Distrito" for="distrito" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:selectOneMenu id="distrito" value="#{clienteC.cliente.CODUBI}" style="width:270px" required="true" requiredMessage="Seleccione el Distrito"
+                                                 filter="true" filterMatchMode="contains">
+                                    <f:selectItem noSelectionOption="false" itemLabel="#{clienteC.cliente.ubigeo.CODUBI}" itemValue="#{clienteC.cliente.ubigeo.CODUBI}"/>
+                                    <f:selectItems value="#{ubigeoC.listadoUbigeo}" var="ubigeo"
+                                                   itemValue="#{ubigeo.CODUBI}"
+                                                   itemLabel="#{ubigeo.DISUBI} - #{ubigeo.PROUBI} - #{ubigeo.DEPUBI}"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgDistrito" for="distrito"/>
+                                <p:commandButton  value="Modificar" actionListener="#{clienteC.modificar()}" icon="pi pi-pencil"
+                                                  disabled="false" update=":form2:tablaCli mensaje" style="font-weight:bold; font-size:16px">
+                                    <p:confirm header="Confirmación" type="popup" message="¿Deseas Modificar?" icon="pi pi-exclamation-triangle"/>
+                                </p:commandButton>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" immediate="true" oncomplete="PF('wdlgModificar').hide();" style="font-weight:bold; font-size:16px"/>
+                            </p:panelGrid>
+                        </p:dialog>
+                    </center>
+                </h:form>
+                <h:form id="form4">
+                    <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                    </p:confirmPopup>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                    </p:confirmDialog>
+                </h:form>
+            </div>
+        </h:body>
+    </ui:define>
+
+</ui:composition>

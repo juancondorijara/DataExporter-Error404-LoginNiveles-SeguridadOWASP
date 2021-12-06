@@ -1,0 +1,16 @@
+controlador\ClienteC.class
+validator\DniV.class
+dao\ICRUD.class
+validator\CelularV.class
+dao\ClienteImpl.class
+services\ReniecS.class
+controlador\UbigeoC.class
+services\EmailS.class
+dao\UbigeoD.class
+modelo\Ubigeo.class
+dao\UsuarioD.class
+dao\Conexion.class
+modelo\Cliente.class
+controlador\UsuarioC.class
+modelo\Usuario.class
+validator\EmailV.class

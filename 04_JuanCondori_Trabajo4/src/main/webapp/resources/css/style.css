@@ -1,0 +1,30 @@
+.value {
+    font-weight: bold;
+}
+.columna1,columna4{
+    width: 10%;   
+    font-weight: bold; 
+    color: orangered;
+}
+
+.columna2{
+    width: 50%;
+    font-weight: bold; 
+    color: blue;
+}
+.columna4{
+    width: 6%;    
+    font-weight: bold; 
+    color: blue;
+}
+
+.contPac{
+    width: 67%;
+}
+.contMed{
+    width: 70%;
+}
+
+button.ui-button {
+    margin-right: .5rem;
+}

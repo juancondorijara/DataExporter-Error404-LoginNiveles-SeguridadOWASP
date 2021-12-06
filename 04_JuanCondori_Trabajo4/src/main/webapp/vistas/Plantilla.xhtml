@@ -1,0 +1,313 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <h:head>
+        <link rel="icon" type="image/png" href="resources/images/carrito.png" />
+        <title>DEMO</title>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/css/cssLayout.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/css/default.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/css/demo-light.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/css/layout-light.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/css/primeflex.min.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/css/primeicons.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/css/style.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/css/toggleswitch.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/fa/font-awesome.css"/>
+        <!--ESTO ESTA COMENTADO PARA QUE FUNCIONEN LOS KEYFILER-->
+        <!--<script type="text/javascript" src="#{request.contextPath}/faces/resources/jquery/jquery-plugins.js"></script>-->
+        <!--<script type="text/javascript" src="#{request.contextPath}/faces/resources/jquery/jquery.js"></script>-->     
+        <script type="text/javascript" src="#{request.contextPath}/faces/resources/js/Calendar.js"></script>
+        <script type="text/javascript" src="#{request.contextPath}/faces/resources/js/chart.js"></script>
+        <script type="text/javascript" src="#{request.contextPath}/faces/resources/js/layout.js"></script>
+        <script type="text/javascript" src="#{request.contextPath}/faces/resources/js/prism.js"></script>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/components.css"/>
+        <script type="text/javascript" src="#{request.contextPath}/faces/resources/components.js"></script>
+        <script type="text/javascript" src="#{request.contextPath}/faces/resources/core.js"></script>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/theme.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/faces/resources/inputswitch/inputswitch.css"/>
+        <script type="text/javascript" src="#{request.contextPath}/faces/resources/inputswitch/inputswitch.js"></script>
+        <script type="text/javascript" src="#{request.contextPath}/faces/resources/js/validator.js"></script>
+    </h:head>
+
+    <h:body class="main-body ">
+        <div class="layout-wrapper layout-topbar-light layout-static-active layout-menu-dim  layout-static layout-static-active ">
+
+            <div class="layout-topbar" style="height:70px;">
+                <div class="layout-topbar-wrapper">
+                    <div class="layout-topbar-left">
+                        <a id="logolink" name="logolink" href="#" class="layout-topbar-logo">
+                            <!--<img id="j_idt12" src="#{request.contextPath}/faces/resources/images/LogoConflomark.png" alt="" style="width:220px;height:65px;"/>-->
+                        </a>
+                    </div>
+                    <div class="layout-topbar-right">
+                        <a href="#" class="menu-button" style="width:10%; height:100%;">
+                            <i class="pi pi-bars"></i>
+                            <span style="float:right; color:black; font-weight:bold">MENÚ</span>
+                        </a>
+                        <a href="#" class="menu-button" style="width:8%; height:100%; background:white">
+                        </a>
+                        <a href="#" class="menu-button" style="width:8%; height:100%; background:white">
+                        </a>
+                        <a style="text-align:center; color:black; font-weight:bold">
+                            <b>FECHA: </b><p:clock pattern="dd-MMM-yyyy" mode="server"/>
+                            <b>HORA: </b><p:clock pattern="HH:mm:ss" mode="server"/>
+                        </a>
+                        <ul class="layout-topbar-actions">
+                            <li class="search-item topbar-item">
+                                <a href="#">
+                                    <span class="topbar-icon">
+                                        <i class="pi pi-search"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="topbar-item notifications">
+                                <a href="#">
+                                    <span class="">
+                                        <i class="pi pi-bell"></i>
+                                        <span class="ui-badge">2</span>
+                                    </span>
+                                </a>
+                                <ul>
+                                    <li class="layout-submenu-header">
+                                        <h6 class="header-text">Notifications</h6>
+                                        <span class="ui-badge">3</span>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="fa fa-fw fa-edit"></i>
+                                            <div class="notifications-item">
+                                                <h6>Order <span>#2254</span> is placed</h6>
+                                                <span>Total Amount of <span>$34.50</span></span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-clock"></i>
+                                            <div class="notifications-item">
+                                                <h6>Meeting with <span>AF04</span> Team</h6>
+                                                <span>Google Meets</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-th-large"></i>
+                                            <div class="notifications-item">
+                                                <h6>Task <span>#41</span> is complete</h6>
+                                                <span>9 Remaining Tasks</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-shopping-cart"></i>
+                                            <div class="notifications-item">
+                                                <h6>Order <span>#2255</span> is placed</h6>
+                                                <span>Total Amount of <span>$40.45</span></span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="topbar-item messages">
+                                <a href="#">
+                                    <span class="ui-overlay-badge topbar-icon">
+                                        <i class="pi pi-comments"></i>
+                                        <span class="ui-badge">6</span>
+                                    </span>
+                                </a>
+                                <ul>
+                                    <li class="layout-submenu-header">
+                                        <h6 class="header-text">Messages</h6>
+                                        <span class="ui-badge">5</span>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0"><img id="j_idt24"
+                                                             src="#{request.contextPath}/faces/resources/images/Juan.jpg"
+                                                             alt="" />
+                                            <div class="messages-item">
+                                                <h6>Hey! I sent the sales report</h6>
+                                                <span>Dusana Semenov</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0"><img id="j_idt26"
+                                                             src="#{request.contextPath}/faces/resources/images/Juan.jpg"
+                                                             alt="" />
+                                            <div class="messages-item">
+                                                <h6>OK. Let’s meet at 15 pm...</h6>
+                                                <span>Edward Lindgren</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0"><img id="j_idt28"
+                                                             src="#{request.contextPath}/faces/resources/images/Juan.jpg"
+                                                             alt="" />
+                                            <div class="messages-item">
+                                                <h6>Presentation is ready</h6>
+                                                <span>Noell Blue</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0"><img id="j_idt30"
+                                                             src="#{request.contextPath}/faces/resources/images/Juan.jpg"
+                                                             alt="" />
+                                            <div class="messages-item">
+                                                <h6>Faulty delivery on #959</h6>
+                                                <span>Gvozden Boskovsky</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="topbar-item settings">
+                                <a href="#">
+                                    <span class="topbar-icon">
+                                        <i class="pi pi-cog"></i>
+                                    </span>
+                                </a>
+                                <ul>
+                                    <li class="layout-submenu-header">
+                                        <h6 class="header-text">Settings</h6>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-user"></i>
+                                            <div class="settings-item">
+                                                <h6>Account Info</h6>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-users"></i>
+                                            <div class="settings-item">
+                                                <h6>Global Accounts</h6>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-bell"></i>
+                                            <div class="settings-item">
+                                                <h6>Notification Preferences</h6>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-lock"></i>
+                                            <div class="settings-item">
+                                                <h6>Login Settings</h6>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="topbar-item user-profile">
+                                <a href="#">
+                                    <img id="j_idt32" src="#{request.contextPath}/faces/resources/images/Juan.jpg" alt=""/>
+                                    <div class="profile-info">
+                                            <h6></h6>
+                                            <span></span>
+                                    </div>
+                                </a>
+                                <ul>
+                                    <li class="layout-submenu-header">
+                                        <!--<img id="j_idt34" src="#{request.contextPath}/faces/resources/images/Juan.jpg" alt="" />-->
+                                        <div class="profile-info">
+                                            <h6></h6>
+                                            <span></span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="pi pi-cog"></i>
+                                            <h6>Setting</h6>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="pi pi-cog"></i>
+                                            <h6>Logout</h6>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="pi pi-power-off"></i>
+                                            <h:form>
+                                                <p:commandButton value="Cerrar Sesión" actionListener="#{usuarioC.cerrarSesion()}" style="font-size:15px; font-weight:bold"/>
+                                            </h:form>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <a href="#" class="layout-rightpanel-button">
+                            <h:form>
+                                <p:commandButton value="Cerrar Sesión" actionListener="#{usuarioC.cerrarSesion()}" style="font-size:13px; font-weight:bold"/>
+                            </h:form>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-wrapper">
+                <div class="layout-menu-container">
+                    <form id="menuform" name="menuform" method="post"
+                          action="https://www.primefaces.org/poseidon/empty.xhtml"
+                          enctype="application/x-www-form-urlencoded">
+                        <input type="hidden" name="menuform" value="menuform"/>
+                        <ul id="menuform:j_idt37" class="layout-menu">
+                            <li id="menuform:om_components" role="menuitem" class="layout-root-menuitem">
+                                <div><span class="layout-menuitem-text" style="color:white; font-weight:bold; font-size:15px">
+                                        OPCIONES</span>
+                                </div>
+                                <ul role="menu">
+                                    <li id="menuform:om_input" role="menuitem">
+                                        <a href="/04_JuanCondori_Trabajo4/faces/vistas/Clientes.xhtml">
+                                            <i class="pi pi-users"></i>
+                                            <span style="color:white; font-weight:bold; font-size:15px" class="layout-menuitem-text">CLIENTE</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li> 
+                        </ul>
+                        <script id="menuform:j_idt37_s"
+                        type="text/javascript">PrimeFaces.cw("Poseidon", "PoseidonMenuWidget", {id: "menuform:j_idt37", pathname: "/poseidon/empty.xhtml"});</script>
+                        <input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:2"
+                               value="14820066986301620:-347298951948200645" autocomplete="off"/>
+                    </form>
+                </div>
+            </div>
+
+            <div class="layout-main">
+                <div class="layout-content">
+                    <div class="p-grid">
+                        <div class="p-col">
+                            <!--<div class="card">-->
+                            <ui:insert name="content"/>
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:body>
+
+</html>

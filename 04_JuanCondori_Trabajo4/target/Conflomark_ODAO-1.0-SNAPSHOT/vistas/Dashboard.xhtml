@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <h:head>
+            <f:event type="preRenderView" listener="#{usuarioC.seguridadSesion()}"/>
+        </h:head>
+        <h:outputStylesheet library="css" name="primeflex.min.css"/>
+        <h:outputStylesheet library="css" name="primeflex.css"/>
+        <h:body>
+            <p:growl id="mensajes" severity="info,fatal,warn,error" showSummary="true" showDetail="true"/>
+            <br/>
+            <br/>
+            <div class="p-grid">
+                <div class="p-col" style="background-color: #fffafa">
+                    <div class="box" style="text-align: center; color:black; font-weight:bold">
+                        <b>FECHA: </b><p:clock pattern="dd-MMM-yyyy" mode="server"/>
+                        <b>HORA: </b><p:clock pattern="HH:mm:ss" mode="server"/>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <center>
+                    <h1 style="color:black; font-weight:bold; font-size:30px">REPORTE DE VENTA POR RANGO DE FECHA</h1>
+                </center>
+            </div>
+            <br/>
+            <div class="p-grid">
+                <div class="p-col" style="background-color: #fffafa">
+                    <div class="box" style="text-align: center; color:black; font-weight:bold">
+                        <h:form>
+                            <center>
+                                <p:panelGrid columns="5" styleClass="ui-noborder">
+                                    <p:outputLabel value="Fecha de Inicio:" style="color:black; font-weight:bold; font-size:16px"/>
+                                    <p:calendar id="inicio" value="#{dashboardC.INICIO}" size="15"
+                                                showOn="button" pattern="dd/MM/yy" navigator="true" locale="es">
+                                        <p:tooltip for="inicio" value="FECHA DE INICIO" trackMouse="focus"/>
+                                    </p:calendar>
+                                    <p:outputLabel value="Fecha Final:" style="color:black; font-weight:bold; font-size:16px"/>
+                                    <p:calendar id="fin" value="#{dashboardC.FIN}" size="15"
+                                                showOn="button" pattern="dd/MM/yy" navigator="true" locale="es">
+                                        <p:tooltip for="fin" value="FECHA DE FIN" trackMouse="focus"/>
+                                    </p:calendar>
+                                    <p:commandButton value="REPORTE" actionListener="#{dashboardC.rangoFecha()}" ajax="false" 
+                                                     onclick="this.form.target = '_blank'" icon="pi pi-file-pdf">
+                                    </p:commandButton>
+                                </p:panelGrid>
+                            </center>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+            <br/>
+            <div>
+                <center>
+                    <h1 style="color:black; font-weight:bold; font-size:30px">DASHBOARD DE CLIENTES Y EMPLEADOS</h1>
+                </center>
+            </div>
+            <br/>
+            <div class="p-grid">
+                <div class="p-col">
+                    <div class="box" style="background-color: #fffdfc">
+                        <p:pieChart model="#{dashboardC.dashboardCliente}" style="width: 100%; height: 500px;"/>
+                    </div>
+                </div>
+                <div class="p-col">
+                    <div class="box" style="background-color: #fffdfc">
+                        <p:pieChart model="#{dashboardC.dashboardEmpleado}" style="width: 100%; height: 500px;"/>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+            <br/>
+            <div>
+                <center>
+                    <h1 style="color:black; font-weight:bold; font-size:30px">DASHBOARD DE VENTAS REALIZADAS SEGUN EL MES</h1>
+                </center>
+            </div>
+            <br/>
+            <h:form>
+                <p:growl id="growl" showDetail="true"/>
+                <div class="p-grid">
+                    <div class="p-col" style="background-color: #fffafa; text-align: center">
+                        <div class="box" style="background-color: #fffdfc">
+                            <p:barChart model="#{dashboardC.barVenta}" style="width: 100%; height: 500px;">
+                            </p:barChart>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+
+            <br/>
+            <br/>
+            <div>
+                <center>
+                    <h1 style="color:black; font-weight:bold; font-size:30px">TABLA DE MAPEO</h1>
+                </center>
+            </div>
+            <br/>
+            <h:form id="form">
+                <p:growl id="mensajes" severity="info,fatal,warn,error" showSummary="true" showDetail="true"/>
+                <div class="card">
+                    <center>
+                        <h1 style="color:black; font-weight:bold; font-size:20px">Haga Doble Click para editar el ROL</h1>
+                        <p:dataTable id="mapeo" var="tblmapeo" value="#{dashboardC.listaUserEmpleado}" style="width:70%; margin-bottom:20px"
+                                     editable="true">
+
+                            <p:ajax event="rowEdit" listener="#{dashboardC.FIN}" update="form:mensajes"/>
+                            <p:ajax event="rowEditCancel" listener="#{dashboardC.FIN}" update="form:mensajes"/>
+
+                            <p:column headerText="ID" style="width:20px; color:black">
+                                <h:outputLabel value="#{tblmapeo.IDEMP}"/>
+                            </p:column>
+                            <p:column headerText="USUARIOS" style="width:100px; color:black">
+                                <h:outputLabel value="#{tblmapeo.USUUSU}"/>
+                            </p:column>
+                            <p:column headerText="NOMBRES Y APELLIDOS" style="width:250px; color:black">
+                                <h:outputLabel value="#{tblmapeo.NOMEMP.concat(', ').concat(tblmapeo.APEEMP)}"/>
+                            </p:column>
+                            <p:column headerText="ROL" style="width:100px; color:black">
+                                <p:outputLabel value="#{tblmapeo.ROLUSU}">
+                                    <f:converter converterId="rolConverter"/>
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="" style="width:20px; color:black">
+                                <p:commandButton id="editar" icon="pi pi-pencil" actionListener="#{usuarioC.modificarRolUser(tblmapeo.ROLUSU, tblmapeo.IDEMP)}" update="mapeo mensajes">
+                                    <p:confirm header="Confirmación" type="popup" message="¿Deseas Modificar?" icon="pi pi-exclamation-triangle"/>
+                                    <p:tooltip for="editar" value="EDITAR EL ROL" trackMouse="focus"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </center>
+                </div>
+            </h:form>
+
+            <h:form id="editar">
+                <center>
+                    <p:dialog id="dlgDatos" header="ROL DEL USUARIO" widgetVar="wdlgRol" modal="true" width="250px"
+                              showEffect="fade" hideEffect="fade" resizable="false" minimizable="false" maximizable="false">
+                        <h:form>
+                            <p:panelGrid columns="2" styleClass="ui-noborder">
+                                <h:outputText id="id" value="#{usuarioC.usuario.IDUSU}" style="width:270px;">
+                                </h:outputText>
+                                <p:selectOneMenu value="#{usuarioC.usuario.ROLUSU}" style="width:130px">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Rol"/>
+                                    <f:selectItem itemValue="A" itemLabel="Administrador"/>
+                                    <f:selectItem itemValue="T" itemLabel="Trabajador"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="Modificar" id="editar" icon="pi pi-pencil" actionListener="#{usuarioC.modificarRolUser(tblmapeo.ROLUSU, tblmapeo.IDEMP)}"
+                                                 update=":editar:dlgDatos" style="font-weight:bold; font-size:16px">
+                                    <p:confirm header="Confirmación" type="popup" message="¿Deseas Modificar?" icon="pi pi-exclamation-triangle"/>
+                                    <p:tooltip for="editar" value="EDITAR EL ROL" trackMouse="focus"/>
+                                </p:commandButton>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" immediate="true" oncomplete="PF('wdlgRol').hide();" style="font-weight:bold; font-size:16px"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                </center>
+            </h:form>
+
+            <h:form id="form4">
+                <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                </p:confirmPopup>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                </p:confirmDialog>
+            </h:form>
+        </h:body>
+    </ui:define>
+</ui:composition>

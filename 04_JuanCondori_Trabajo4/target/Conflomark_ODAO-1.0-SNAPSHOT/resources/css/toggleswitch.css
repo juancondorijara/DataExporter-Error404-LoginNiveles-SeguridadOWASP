@@ -1,0 +1,29 @@
+.ui-toggleswitch .ui-toggleswitch-slider {
+
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    border-radius: 30px;
+    background-color: #72707080;
+
+}
+
+.ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
+
+    background-color: green;
+}
+
+.ui-toggleswitch .ui-toggleswitch-slider::before {
+
+    background-color: #ffffff;
+    height: 1.250em;
+    width: 1.250em;
+    left: .25em;
+    bottom: .25em;
+    border-radius: 50%;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+
+}
+

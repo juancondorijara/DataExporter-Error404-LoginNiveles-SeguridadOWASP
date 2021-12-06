@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="content">
+        <h:head>
+            <f:event listener="#{proveedorC.listar()}" type="preRenderView"/>
+            <f:event type="preRenderView" listener="#{usuarioC.seguridadSesion()}"/>
+        </h:head>
+        <p:growl id="mensajes" severity="info,fatal" showSummary="true" showDetail="true"/>
+
+        <h:body>
+            <p:growl id="mensaje" showDetail="true"/>
+            <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+            <div>
+                <center>
+                    <h:form id="opciones">
+                        <h1 style="color:black; font-weight:bold; font-size:40px">REGISTRO DE PROVEEDORES</h1>
+                        <p:panelGrid columns="1">
+                            <p:commandButton value="Registrar" icon="pi pi-user-plus" oncomplete="PF('wdlgRegistrar').show();" style="font-size:25px; font-weight:bold"/>
+                        </p:panelGrid>
+                    </h:form>
+                </center>
+            </div>
+
+            <h:form id="form" prependId="false">
+                <center>
+                    <p:dialog id="dlgDatos" header="REGISTRO DE PROVEEDORES" widgetVar="wdlgRegistrar" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false" minimizable="false" maximizable="false">
+                        <p:ajax event="close" listener="${proveedorC.limpiar()}" update="form"/>
+                        <p:panelGrid columns="3" styleClass="ui-noborder">
+                            <p:outputLabel value="RUC" for="ruc" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:commandButton value="Buscar" actionListener="#{proveedorC.buscarRUC()}" update="razon direccion comercial email celular distrito mensajes"
+                                             icon="pi pi-search" style="font-weight:bold; font-size:16px">
+                                <p:inputText id="ruc" value="#{proveedorC.proveedor.RUCPROV}" onkeyup="validarRUC()" maxlength="11" style="width:110px;" required="true" requiredMessage="Ingrese el RUC">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                    <f:validator validatorId="rucV"/>
+                                    <p:ajax update="msgRuc" event="keyup" delay="800"/>
+                                    <p:tooltip for="ruc" value="Ingrese el RUC" trackMouse="focus"/>
+                                </p:inputText>
+                            </p:commandButton>
+                            <p:message id="msgRuc" for="ruc"/>
+                            <p:outputLabel value="Razón Social" for="razon" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="razon" value="#{proveedorC.proveedor.NOMPROV}" maxlength="50" style="width:270px;" requiredMessage="Ingrese la Razón Social">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                <p:ajax update="msgRazon" event="keyup" delay="800"/>
+                                <p:tooltip for="razon" value="Ingrese la Razón Social" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgRazon" for="razon"/>
+                            <p:outputLabel value="Nombre Comercial" for="comercial" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="comercial" value="#{proveedorC.proveedor.COMPROV}" maxlength="50" style="width:270px;" requiredMessage="Ingrese el Nombre Comercial">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                <p:ajax update="msgComercial" event="keyup" delay="800"/>
+                                <p:tooltip for="comercial" value="Ingrese el Nombre Comercial" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgComercial" for="comercial"/>
+                            <p:outputLabel value="Dirección" for="direccion" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="direccion" value="#{proveedorC.proveedor.DIRPROV}" maxlength="80" style="width:270px;" requiredMessage="Ingrese la Dirección">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_:_._ ]/"/>
+                                <p:ajax update="msgDireccion" event="keyup" delay="800"/>
+                                <p:tooltip for="direccion" value="Ingrese la Dirección" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgDireccion" for="direccion"/>
+                            <p:outputLabel value="Email" for="email" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="email" value="#{proveedorC.proveedor.EMAPROV}" maxlength="50" style="width:270px;" requiredMessage="Ingrese el Email">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_._@]/"/>
+                                <f:validator validatorId="emailV"/>
+                                <p:ajax update="msgEmail" event="keyup" delay="800"/>
+                                <p:tooltip for="email" value="Ingrese el Email" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgEmail" for="email"/>
+                            <p:outputLabel value="Celular" for="celular" style="color:black; font-weight:bold; font-size:16px"/> 
+                            <p:inputText id="celular" value="#{proveedorC.proveedor.CELPROV}" onkeyup="validarCelular()" maxlength="9" style="width:170px;" requiredMessage="Ingrese el Celular">
+                                <p:keyFilter regEx="/[0-9]/"/>
+                                <f:validator validatorId="celularV"/>
+                                <p:ajax update="msgCelular" event="keyup" delay="800"/>
+                                <p:tooltip for="celular" value="Ingrese el Celular" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgCelular" for="celular"/>
+                            <p:outputLabel value="Distrito" for="distrito" style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:selectOneMenu id="distrito" value="#{proveedorC.proveedor.CODUBI}" style="width:270px" filter="true" filterMatchMode="contains" requiredMessage="Seleccione el Distrito">
+                                <f:selectItem noSelectionOption="true" itemLabel="Seleccione" itemValue="#{null}"/>
+                                <f:selectItems value="#{ubigeoC.listadoUbigeo}" var="ubigeo"
+                                               itemValue="#{ubigeo.CODUBI}"
+                                               itemLabel="#{ubigeo.DISUBI} - #{ubigeo.PROUBI} - #{ubigeo.DEPUBI}"/>
+                            </p:selectOneMenu>
+                            <p:message id="msgDistrito" for="distrito"/>
+                            <p:commandButton id="registrar" value="Registrar" actionListener="#{proveedorC.registrar()}" icon="pi pi-save" disabled="false" style="font-weight:bold; font-size:16px"
+                                             update=":form2:tablaProv mensajes msgRuc" widgetVar="btnregistrar">
+                                <p:confirm header="Confirmación" type="popup" message="¿Deseas Registrar?" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" immediate="true" oncomplete="PF('wdlgRegistrar').hide();" style="font-weight:bold; font-size:16px"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </center>
+            </h:form>
+
+            <div class="card" style="margin-left:50px; margin-right:50px">
+                <h:form id="form2">
+                    <center>
+                        <p:dataTable id="tablaProv" var="tblprov" value="#{proveedorC.listadoProveedor}" selection="#{proveedorC.proveedor}"
+                                     selectionMode="single" rowKey="#{tblprov.IDPROV}" resizableColumns="true"
+                                     paginator="true" rows="5" widgetVar="tblProveedor" styleClass="ui-yesborder"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,15,{ShowAll|'All'}" style="width:100%; border-style:none;">
+                            <f:facet name="header">
+                                <div style="float:left">
+                                    <h:form>
+                                        <p:outputLabel value="FILTRO POR: " style="color:black; font-weight:bold"/>
+                                        <center>
+                                            <p:selectOneMenu value="#{proveedorC.tipo}" style="width:100px">
+                                                <f:selectItem itemLabel="Activos" itemValue="1"/> 
+                                                <f:selectItem itemLabel="Inactivos" itemValue="2"/>
+                                                <f:selectItem itemLabel="Todos" itemValue="3"/>
+                                                <p:ajax listener="#{proveedorC.listar()}" update=":form2:tablaProv"/>
+                                            </p:selectOneMenu>
+                                        </center>
+                                    </h:form>
+                                </div>
+                                <div style="float:right">
+                                    <p:commandButton value="REPORTE" actionListener="#{proveedorC.reporteProveedor()}" update="mensajes" ajax="false" icon="pi pi-file-pdf"
+                                                     onclick="this.form.target = '_blank'" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                    </p:commandButton>
+                                    <p:commandButton value="EXCEL" icon="pi pi-file-excel" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                        <p:dataExporter type="xls" target=":form2:tablaProv" fileName="Lista de Clientes_XLS" options="#{proveedorC.xls}"/>
+                                    </p:commandButton>
+                                </div>
+                                <br/>
+                            </f:facet>
+                            <f:facet name= "header"><center style="color:black; font-weight:bold; font-size:25px">LISTA DE PROVEEDORES</center></f:facet>
+                            <p:column style="width:90px; color:black" headerText="RUC" filterBy="#{tblprov.RUCPROV}">
+                                <h:outputText value="#{tblprov.RUCPROV}"/>
+                            </p:column>
+                            <p:column style="width:160px; color:black" headerText="RAZÓN SOCIAL" filterBy="#{tblprov.NOMPROV}">
+                                <h:outputText value="#{tblprov.NOMPROV}"/>
+                            </p:column>
+                            <p:column style="width:90px; color:black" headerText="COMERCIAL" filterBy="#{tblprov.COMPROV}">
+                                <h:outputText value="#{tblprov.COMPROV}"/>
+                            </p:column>
+                            <p:column style="width:180px; color:black" headerText="EMAIL" filterBy="#{tblprov.EMAPROV}">
+                                <h:outputText value="#{tblprov.EMAPROV}"/>
+                            </p:column>
+                            <p:column style="width:80px; color:black" headerText="CELULAR" filterBy="#{tblprov.CELPROV}">
+                                <h:outputText value="#{tblprov.CELPROV}"/>
+                            </p:column>
+                            <p:column style="width:250px; color:black" headerText="DIRECCIÓN" filterBy="#{tblprov.DIRPROV}">
+                                <h:outputText value="#{tblprov.DIRPROV}"/>
+                            </p:column>
+                            <p:column style="width:180px; color:black" headerText="DISTRITO" filterBy="#{tblprov.CODUBI}">
+                                <h:outputText value="#{tblprov.DISUBI} - #{tblprov.PROUBI} - #{tblprov.DEPUBI}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <center style="color:black; font-weight:bold; font-size:20px">
+                                    EN TOTAL HAY #{fn:length(proveedorC.listadoProveedor)} REGISTROS
+                                </center>
+                            </f:facet>
+                        </p:dataTable>
+                    </center>
+                    <p:contextMenu for="tablaProv">
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" oncomplete="PF('wdlgModificar').show()" update=":form3" style="color:black; font-weight:bold; font-size:15px">
+                        </p:menuitem>
+                        <p:menuitem value="Eliminar" icon="pi pi-trash" actionListener="#{proveedorC.eliminarEstado()}" update=":form2:tablaProv mensaje" style="color:black; font-weight:bold; font-size:15px">
+                            <p:confirm header="Confirmación" message="¿Deseas eliminar?" icon="pi pi-trash"/>
+                        </p:menuitem>
+                        <p:menuitem value="Restaurar" icon="pi pi-user-plus" actionListener="#{proveedorC.restaurarEstado()}" update=":form2:tablaProv mensaje" style="color:black; font-weight:bold; font-size:15px">
+                            <p:confirm header="Confirmación" message="¿Deseas Restaurar?" icon="pi pi-user-plus"/>
+                        </p:menuitem>
+                        <p:menuitem value="Eli" icon="pi pi-trash" actionListener="#{proveedorC.eliminar()}" update=":form2:tablaProv mensaje" style="color:black; font-weight:bold; font-size:15px">
+                            <p:confirm header="Confirmación" message="¿Deseas eliminar?" icon="pi pi-trash"/>
+                        </p:menuitem>
+                        <p:menuitem icon="pi pi-briefcase" value="Registrar Producto" outcome="/vistas/Productos" style="color:black; font-weight:bold; font-size:14px"/>
+                        <p:menuitem icon="pi pi-shopping-cart" value="Registrar Venta" outcome="/vistas/Ventas" style="color:black; font-weight:bold; font-size:14px"/>
+                    </p:contextMenu>
+                </h:form>
+
+                <h:form id="form3">
+                    <center>
+                        <p:dialog id="dlgDatos" header="DATOS DEL PROVEEDOR" widgetVar="wdlgModificar" modal="true"
+                                  showEffect="fade" hideEffect="fade" resizable="false" minimizable="false" maximizable="false">
+                            <p:panelGrid columns="3" styleClass="ui-noborder">
+                                <p:outputLabel value="RUC" for="ruc" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:commandButton value="Buscar" actionListener="#{proveedorC.buscarRUC()}" update="razon direccion distrito mensajes"
+                                                 icon="pi pi-search" style="font-weight:bold; font-size:16px">
+                                    <p:inputText id="ruc" value="#{proveedorC.proveedor.RUCPROV}" onkeyup="validarRUC()" maxlength="11" style="width:110px;" required="true" requiredMessage="Ingrese el RUC">
+                                        <p:keyFilter regEx="/[0-9]/"/>
+                                        <p:ajax update="msgRuc" event="keyup" delay="800"/>
+                                        <p:tooltip for="ruc" value="Ingrese el RUC" trackMouse="focus"/>
+                                    </p:inputText>
+                                </p:commandButton>
+                                <p:message id="msgRuc" for="ruc"/>
+                                <p:outputLabel value="Razón Social" for="razon" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="razon" value="#{proveedorC.proveedor.NOMPROV}" maxlength="50" style="width:270px;" requiredMessage="Ingrese la Razón Social">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                    <p:ajax update="msgRazon" event="keyup" delay="800"/>
+                                    <p:tooltip for="razon" value="Ingrese la Razón Social" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgRazon" for="razon"/>
+                                <p:outputLabel value="Nombre Comercial" for="comercial" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="comercial" value="#{proveedorC.proveedor.COMPROV}" maxlength="50" style="width:270px;" requiredMessage="Ingrese el Nombre Comercial">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                    <p:ajax update="msgComercial" event="keyup" delay="800"/>
+                                    <p:tooltip for="comercial" value="Ingrese el Nombre Comercial" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgComercial" for="comercial"/>
+                                <p:outputLabel value="Dirección" for="direccion" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="direccion" value="#{proveedorC.proveedor.DIRPROV}" maxlength="80" style="width:270px;" requiredMessage="Ingrese la Dirección">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_:_._ ]/"/>
+                                    <p:ajax update="msgDireccion" event="keyup" delay="800"/>
+                                    <p:tooltip for="direccion" value="Ingrese la Dirección" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgDireccion" for="direccion"/>
+                                <p:outputLabel value="Email" for="email" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:inputText id="email" value="#{proveedorC.proveedor.EMAPROV}" maxlength="50" style="width:270px;" requiredMessage="Ingrese el Email">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_._@]/"/>
+                                    <p:ajax update="msgEmail" event="keyup" delay="800"/>
+                                    <p:tooltip for="email" value="Ingrese el Email" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgEmail" for="email"/>
+                                <p:outputLabel value="Celular" for="celular" style="color:black; font-weight:bold; font-size:16px"/> 
+                                <p:inputText id="celular" value="#{proveedorC.proveedor.CELPROV}" onkeyup="validarCelular()" maxlength="9" style="width:170px;" requiredMessage="Ingrese el Celular">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                    <p:ajax update="msgCelular" event="keyup" delay="800"/>
+                                    <p:tooltip for="celular" value="Ingrese el Celular" trackMouse="focus"/>
+                                </p:inputText>
+                                <p:message id="msgCelular" for="celular"/>
+                                <p:outputLabel value="Distrito" for="distrito" style="color:black; font-weight:bold; font-size:16px"/>
+                                <p:selectOneMenu id="distrito" value="#{proveedorC.proveedor.CODUBI}" style="width:270px" filter="true" filterMatchMode="contains" requiredMessage="Seleccione el Distrito">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{proveedorC.proveedor.ubigeo.CODUBI}" itemValue="#{proveedorC.proveedor.ubigeo.CODUBI}"/>
+                                    <f:selectItems value="#{ubigeoC.listadoUbigeo}" var="ubigeo"
+                                                   itemValue="#{ubigeo.CODUBI}"
+                                                   itemLabel="#{ubigeo.DISUBI} - #{ubigeo.PROUBI} - #{ubigeo.DEPUBI}"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgDistrito" for="distrito"/>
+                                <p:commandButton  value="Modificar" actionListener="#{proveedorC.modificar()}" icon="pi pi-pencil"
+                                                  disabled="false" update="form3 :form2:tablaProv mensaje" style="font-weight:bold; font-size:16px">
+                                    <p:confirm header="Confirmación" type="popup" message="¿Deseas Modificar?" icon="pi pi-exclamation-triangle"/>
+                                </p:commandButton>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" immediate="true" oncomplete="PF('wdlgModificar').hide();" style="font-weight:bold; font-size:16px"/>
+                            </p:panelGrid>
+                        </p:dialog>
+                    </center>
+                </h:form>
+                <h:form id="form4">
+                    <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                    </p:confirmPopup>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                    </p:confirmDialog>
+                </h:form>
+            </div>
+        </h:body>
+    </ui:define>
+
+</ui:composition>

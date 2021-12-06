@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="content">
+        <h:head>
+            <f:event listener="#{compraC.listar()}" type="preRenderView"/>
+            <f:event type="preRenderView" listener="#{usuarioC.seguridadSesion()}"/>
+        </h:head>
+        <p:growl id="mensajes" severity="info,fatal" showSummary="true" showDetail="true"/>
+
+        <h:body>
+            <p:growl id="mensaje" showDetail="true"/>
+            <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+            <div>
+                <center>
+                    <h:form id="opciones">
+                        <h1 style="color:black; font-weight:bold; font-size:40px">REGISTRO DE COMPRAS</h1>
+                        <p:separator/>
+                    </h:form>
+                </center>
+            </div>
+
+            <h:form id="form" prependId="false">
+                <center>
+                    <p:panelGrid columns="3" style="margin: 0 auto;" styleClass="ui-noborder">
+                        <p:outputLabel value="Proveedor" for="prov" style="color:black; font-weight:bold; font-size:16px"/>
+                        <p:selectOneMenu id="prov" value="#{compraC.compra.proveedor.IDPROV}" style="width:300px"
+                                         filter="true" filterMatchMode="contains" required="true" requiredMessage="Seleccione el Proveedor" >
+                            <f:selectItem noSelectionOption="true" itemLabel="Seleccione" itemValue="#{null}"/>
+                            <f:selectItems value="#{proveedorC.listadoProveedor}" var="proveedor"
+                                           itemValue="#{proveedor.IDPROV}"
+                                           itemLabel="#{proveedor.NOMPROV}"/>
+                        </p:selectOneMenu>
+                        <p:message for="prov"/>
+                        <p:outputLabel value="Producto" for="pro" style="color:black; font-weight:bold; font-size:16px"/>
+                        <p:selectOneMenu id="pro" value="#{compraC.compra.producto.IDPRO}" style="width:300px"
+                                         filter="true" filterMatchMode="contains" required="true" requiredMessage="Seleccione el Producto" >
+                            <f:selectItem noSelectionOption="true" itemLabel="Seleccione" itemValue="#{null}"/>
+                            <f:selectItems value="#{productoC.listadoProducto}" var="producto"
+                                           itemValue="#{producto.IDPRO}"
+                                           itemLabel="#{producto.NOMPRO}
+                                           #{producto.MARPRO}"/>
+                        </p:selectOneMenu>
+                        <p:message for="pro"/>
+                        <p:outputLabel  value="Cantidad" for="cantidad" style="color:black; font-weight:bold; font-size:16px"/>
+                        <p:spinner id="cantidad" value="#{compraC.compra.CANCOM}" max="50" min="1"
+                                   required="true" requiredMessage="Ingrese la Cantidad" maxlength="2" style="width: 160px">
+                        </p:spinner>
+                        <p:message for="cantidad"/>
+                        <p:outputLabel value="Total" for="total" style="color:black; font-weight:bold; font-size:16px"/> 
+                        <p:inputText id="total" value="#{compraC.compra.TOTCOM}" maxlength="4" style="width:160px"
+                                     required="true" requiredMessage="Ingrese el Total">
+                            <p:keyFilter regEx="/[0-9_.]/" />
+                            <p:tooltip for="total" value="Ingrese el Total" trackMouse="focus"/>
+                        </p:inputText>
+                        <p:message for="total"/>
+                        <p:outputLabel value="Fecha" for="fecha" style="color:black; font-weight:bold; font-size:16px"/>
+                        <p:calendar id="fecha" value="#{compraC.compra.FECCOM}"
+                                    pattern="dd-MM-yyyy" navigator="true" locale="de" maxdate="@now"
+                                    required="true" requiredMessage="Ingrese el Vencimiento" size="18">
+                        </p:calendar>
+                        <p:message for="fecha"/>
+                        <center>
+                            <p/>
+                            <p:commandButton id="registrar" value="Registrar" actionListener="#{compraC.registrar()}" icon="pi pi-save" disabled="false" style="font-weight:bold; font-size:16px"
+                                             update="form :form2:tablaCom mensajes">
+                                <p:confirm header="Confirmación" type="popup" message="¿Deseas Registrar?" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                        </center>
+                    </p:panelGrid>
+                </center>
+            </h:form>
+
+            <h:form id="form2">
+                <center>
+                    <p:dataTable id="tablaCom" var="tblcom" value="#{compraC.listadoCompra}" selection="#{compraC.compra}"
+                                 selectionMode="single" rowKey="#{tblcom.IDCOM}" resizableColumns="true"
+                                 paginator="true" rows="5" widgetVar="tblCliente" styleClass="ui-yesborder"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                 rowsPerPageTemplate="5,10,15,{ShowAll|'All'}" style="width:70%; border-style:none;">
+                        <f:facet name="header">
+                            <div style="float:right">
+                                <p:commandButton value="REPORTE" actionListener="#{compraC.reporteCompra()}" update="mensajes" ajax="false" icon="pi pi-download"
+                                                 onclick="this.form.target = '_blank'" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                </p:commandButton>
+                                <p:commandButton value="EXCEL" icon="pi pi-file-excel" styleClass="rounded-button ui-button-secondary" style="font-weight:bold">
+                                    <p:dataExporter type="xls" target=":form2:tablaCom" fileName="Lista de Compras_XLS"/>
+                                </p:commandButton>
+                            </div>
+                        </f:facet>
+                        <f:facet name= "header"><center style="color:black; font-weight:bold; font-size:25px">LISTA DE COMPRAS</center></f:facet>
+                        <p:column style="width:30px; color:black" headerText="ID" filterBy="#{tblcom.IDCOM}">
+                            <h:outputText value="#{tblcom.IDCOM}"/>
+                        </p:column>
+                        <p:column style="width:120px; color:black" headerText="PROVEEDOR" filterBy="#{tblcom.NOMPROV}">
+                            <h:outputText value="#{tblcom.NOMPROV}"/>
+                        </p:column>
+                        <p:column style="width:80px; color:black" headerText="PRODUCTO" filterBy="#{tblcom.NOMPRO}">
+                            <h:outputText value="#{tblcom.NOMPRO}"/>
+                        </p:column>
+                        <p:column style="width:80px; color:black" headerText="MARCA" filterBy="#{tblcom.MARPRO}">
+                            <h:outputText value="#{tblcom.MARPRO}"/>
+                        </p:column>
+                        <p:column style="width:60px; color:black" headerText="CANTIDAD" filterBy="#{tblcom.CANCOM}">
+                            <h:outputText value="#{tblcom.CANCOM}"/>
+                        </p:column>
+                        <p:column style="width:60px; color:black" headerText="TOTAL" filterBy="#{tblcom.TOTCOM}">
+                            <h:outputText value="#{tblcom.TOTCOM}"/>
+                        </p:column>
+                        <p:column style="width:80px; color:black" headerText="FECHA" filterBy="#{tblcom.FECCOM}">
+                            <h:outputText value="#{tblcom.FECCOM}">
+                                <f:converter converterId="fechaConverter"/>
+                            </h:outputText>
+                        </p:column>
+                        <f:facet name="footer">
+                            <center style="color:black; font-weight:bold; font-size:20px">
+                                EN TOTAL HAY #{fn:length(compraC.listadoCompra)} REGISTROS
+                            </center>
+                        </f:facet>
+                    </p:dataTable>
+                </center>
+            </h:form>
+
+            <h:form id="form4">
+                <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                </p:confirmPopup>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                </p:confirmDialog>
+            </h:form>
+        </h:body>
+    </ui:define>
+
+</ui:composition>

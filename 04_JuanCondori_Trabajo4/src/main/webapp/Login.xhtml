@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>CONFLOMARK</title>
+        <link rel="icon" type="image/png" href="resources/images/carrito.png"/>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="./resources/css/login.css"/>
+        <script type="text/javascript" src="./resources/js/validator.js"></script>
+    </h:head>
+    <p:growl id="mensajes" severity="info,fatal,warn,error" showSummary="true" showDetail="true"/>
+
+    <h:body id="body">
+        <div class="container">
+            <div class="forms-container">
+                <div class="signin-signup">
+                    <h:form id="fmrIngresar" class="sign-in-form" prependId="false">
+                        <h1 class="title" style="color:black; font-weight:bold; font-size:40px">¡BIENVENIDO!</h1>
+                        <div class="page-links">
+                            <a class="active">Iniciar Sesión</a>
+                        </div>
+                        <div class="input-field">
+                            <i class="fas fa-user"></i>
+                            <p:inputText id="usuario" value="#{usuarioC.usuario.USUUSU}" placeholder="Usuario" required="true" requiredMessage="Ingrese el Usuario">
+                                <p:tooltip for="usuario" value="Ingrese el Usuario" trackMouse="focus"/>
+                            </p:inputText>
+                        </div>
+                        <div class="input-field">
+                            <i class="fas fa-lock"></i>
+                            <p:password id="pass" value="#{usuarioC.usuario.PWDUSU}" placeholder="Contraseña" required="true" requiredMessage="Ingrese la Contraseña" feedback="true" weakLabel="Débil" goodLabel="Bueno" strongLabel="Seguro">
+                                <p:tooltip for="pass" value="Ingrese el Passsword" trackMouse="focus"/>
+                            </p:password>
+                        </div>
+                        <p:commandButton id="btnlogin" actionListener="#{usuarioC.iniciarSesion()}"
+                                         value="INICIAR SESIÓN" update="fmrIngresar :mensajes btnlogin usuario pass"
+                                         class="boton" style="font-weight:bold; font-size:20px">
+                        </p:commandButton>
+                    </h:form>
+
+                    <h:form>
+                        <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                        </p:confirmPopup>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                        </p:confirmDialog>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+        <script src="./resources/js/login.js"></script>
+    </h:body>
+
+</html>

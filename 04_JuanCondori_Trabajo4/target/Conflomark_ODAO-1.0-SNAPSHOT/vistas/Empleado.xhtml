@@ -1,0 +1,262 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="content">
+        <h:head>
+            <f:event listener="#{empleadoC.listar()}" type="preRenderView"/>
+        </h:head>
+        <p:growl id="glbMsg" severity="info,fatal" showSummary="true" showDetail="true"/>
+        <h:body>
+            <p:growl id="msgEmpleado" showDetail="true"/>
+            <p:growl id="growl-stck" for="sticky-key" showDetail="true"  sticky="true"/>
+            <!-- Botón de Login: Inicio -->
+            <div>
+                <center>
+                    <h:form id="opciones">
+                        <h1 style="color:black; font-weight:bold; font-size:40px">REGISTRO DE TRABAJADOR</h1>
+                        <p:panelGrid columns="1">
+                            <p:commandButton value="Registrar" icon="pi pi-user-plus" oncomplete="PF('wdlgRegistrar').show();" style="font-size:25px; font-weight:bold"/>
+                        </p:panelGrid>
+                    </h:form>
+                </center>
+            </div>
+            <!-- Botón de Login: Final -->
+            <!-- Formulario/Dialog de registro: Inicio -->
+            <h:form id="form" prependId="false">
+                <center>
+                    <p:dialog id="dlgDatos" header="REGISTRO DE TRABAJADORES" widgetVar="wdlgRegistrar" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false" minimizable="false" maximizable="false">
+                        <p:ajax event="close" listener="${empleadoC.limpiar()}" update="form"/>
+                        <p:panelGrid columns="3" styleClass="ui-noborder">
+
+                            <p:outputLabel for="dni" value="DNI: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:commandButton value="Buscar" actionListener="#{empleadoC.mostrarDNI()}"
+                                             update="txtNOMEMP, txtAPEEMP, txtEMAEMP, celular, txtROLEMP, glbMsg"
+                                             icon="pi pi-search" style="font-weight: bold; font-size: 16px">
+                                <p:inputText id="dni" value="#{empleadoC.empleado.DNIEMP}" placeholder="Nº de DNI"
+                                             required="true" requiredMessage="Ingrese el DNI"
+                                             maxlength="8" style="width:100px;" onkeyup="validarDNI()">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                    <f:validator validatorId="empV"/>
+                                    <p:ajax update="msgDNIEMP" event="keyup" delay="800"/>
+                                    <p:tooltip for="dni" value="Ingrese el número de DNI" trackMouse="focus"/>
+                                </p:inputText>
+                            </p:commandButton>
+                            <p:message id="msgDNIEMP" for="dni"/>
+
+                            <p:outputLabel value="Nombres: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="txtNOMEMP" value="#{empleadoC.empleado.NOMEMP}" placeholder="Nombres"
+                                         maxlength="50" style="width:270px;" requiredMessage="Ingrese nombres">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                <p:tooltip for="txtNOMEMP" value="Ingrese el nombre" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgNOMEMP" for="txtNOMEMP"/>
+
+                            <p:outputLabel value="Apellidos: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="txtAPEEMP" value="#{empleadoC.empleado.APEEMP}" placeholder="Apellidos"
+                                         maxlength="50" style="width:270px;" requiredMessage="Ingrese apellidos">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                                <p:tooltip for="txtAPEEMP" value="Ingrese el apellido" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgAPEEMP" for="txtAPEEMP"/>
+
+                            <p:outputLabel value="Correo: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="txtEMAEMP" value="#{empleadoC.empleado.EMAEMP}" placeholder="Correo electrónico"
+                                         requiredMessage="Ingrese un correo"
+                                         maxlength="50" style="width:270px;">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_._@]/"/>
+                                <!--<f:validator validatorId="emailV"/>-->
+                                <p:tooltip for="txtEMAEMP" value="Ingrese el correo" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgEMAEMP" for="txtEMAEMP"/>
+
+                            <p:outputLabel value="Celular: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="celular" value="#{empleadoC.empleado.CELEMP}" placeholder="Nº de celular"
+                                         requiredMessage="Ingrese un número de celular"
+                                         maxlength="9" style="width:270px;" onkeyup="validarCelular()">
+                                <p:keyFilter regEx="/[0-9]/"/>
+                                <p:tooltip for="celular" value="Ingrese el número de celular" trackMouse="focus"/>
+                            </p:inputText>
+                            <p:message id="msgCELEMP" for="celular"/>
+
+                            <p:outputLabel value="Rol: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:selectOneMenu id="txtROLEMP" value="#{empleadoC.empleado.ROLEMP}">
+                                <f:selectItem noSelectionOption="true" itemLabel="Rol"/>
+                                <f:selectItem itemValue="A" itemLabel="Administrador"/>
+                                <f:selectItem itemValue="T" itemLabel="Trabajador"/>
+                            </p:selectOneMenu>
+                            <p:message id="msgROLEMP" for="txtROLEMP"/>
+
+                            <p:commandButton id="regEMPLEADO" value="Guardar" icon="pi pi-save" disabled="false"
+                                             style="font-weight:bold; font-size:16px" widgetVar="btnregistrar"
+                                             update=":form2:tablaEmp, msgDNIEMP, msgNOMEMP, msgAPEEMP, msgEMAEMP, msgCELEMP,msgROLEMP"
+                                             actionListener="#{empleadoC.registrar()}">
+                                <p:confirm header="Confirmación" type="popup" message="¿Deseas Registrar?" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" immediate="true" oncomplete="PF('wdlgRegistrar').hide();" style="font-weight:bold; font-size:16px"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </center>
+            </h:form>
+            <!-- Formulario/Dialog de registro: Final -->
+            <!-- Tabla de empleados: Inicio -->
+            <div class="card" style="margin-left:50px; margin-right:50px">
+                <h:form id="form2">
+                    <center>
+                        <p:dataTable id="tablaEmp" var="tblemp" value="#{empleadoC.listadoEmpleado}" selection="#{empleadoC.empleado}"
+                                     selectionMode="single" rowKey="#{tblemp.IDEMP}" resizableColumns="true"
+                                     paginator="true" rows="5" widgetVar="tblEmpleado" styleClass="ui-yesborder"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,15,{ShowAll|'All'}" style="width:90%; border-style:none;">
+                            <f:facet name="header">
+                                <div style="float: left">
+                                    <h:form>
+                                        <p:outputLabel value="FILTRO POR: " style="color: black; font-weight: bold"/>
+                                        <center>
+                                            <p:selectOneMenu value="#{empleadoC.tipo}" style="width: 100px">
+                                                <f:selectItem itemLabel="Todos" itemValue="3"/>
+                                                <f:selectItem itemLabel="Activos" itemValue="1"/>
+                                                <f:selectItem itemLabel="Inactivos" itemValue="2"/>
+                                                <p:ajax listener="#{empleadoC.listar()}" update=":form2:tablaEmp"/>
+                                            </p:selectOneMenu>
+                                        </center>
+                                    </h:form>
+                                </div>
+                                <div style="float: right">
+                                    <p:commandButton value="VENTAS POR TRABAJADOR" actionListener="#{empleadoC.ventaTrabajador()}" update="glbMsg" ajax="false" icon="pi pi-file-pdf"
+                                                     onclick="this.form.target = '_blank'" styleClass="rounded-button ui-button-secondary" style="font-weight: bold;">
+                                    </p:commandButton>
+                                    <p:commandButton value="REPORTE" actionListener="#{empleadoC.reporteEmpleado()}" update="glbMsg" ajax="false" icon="pi pi-file-pdf"
+                                                     onclick="this.form.target = '_blank'" styleClass="rounded-button ui-button-secondary" style="font-weight: bold;">
+                                    </p:commandButton>
+                                    <p:commandButton value="EXCEL" icon="pi pi-file-excel" styleClass="rounded-button ui-button-secondary">
+                                        <p:dataExporter type="xls" target=":form2:tablaEmp" fileName="ListaDeEmpleados_XLS" options="#{empleadoC.xls}"/>
+                                    </p:commandButton>
+                                </div>
+                                <br/>
+                            </f:facet>
+                            <f:facet name="header">
+                                <center style="color: black; font-weight: bold; font-size: 25px">
+                                    LISTA DE TRABAJADORES
+                                </center>
+                            </f:facet>
+                            <p:column style="width: 80px; color: black" headerText="DNI" filterBy="#{tblemp.DNIEMP}">
+                                <h:outputLabel value="#{tblemp.DNIEMP}"/>
+                            </p:column>
+                            <p:column style="width: 220px; color: black" headerText="APELLIDOS Y NOMBRES" filterBy="#{tblemp.NOMEMP}">
+                                <h:outputLabel value="#{tblemp.APEEMP}, #{tblemp.NOMEMP}"/>
+                            </p:column>
+                            <p:column style="width:180px; color: black" headerText="EMAIL" filterBy="#{tblemp.EMAEMP}">
+                                <h:outputLabel value="#{tblemp.EMAEMP}"/>
+                            </p:column>
+                            <p:column style="width: 80px; color: black" headerText="CELULAR" filterBy="#{tblemp.CELEMP}">
+                                <h:outputLabel value="#{tblemp.CELEMP}"/>
+                            </p:column>
+                            <p:column style="width: 80px; color: black" headerText="ROL" filterBy="#{tblemp.ROLEMP}">
+                                <h:outputLabel value="#{tblemp.ROLEMP}">
+                                    <f:converter converterId="rolConverter"/>
+                                </h:outputLabel>
+                            </p:column>
+                            <f:facet name="footer">
+                                <center style="color: black; font-weight: bold; font-size: 20px">
+                                    EN TOTAL HAY #{fn:length(empleadoC.listadoEmpleado)} REGISTROS
+                                </center>
+                            </f:facet>
+                        </p:dataTable>
+                    </center>
+                    <p:contextMenu for="tablaEmp">
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" oncomplete="PF('wdlgModificar').show()" update=":form3" style="color:black; font-weight:bold; font-size:15px">
+                        </p:menuitem>
+                        <p:menuitem value="Eliminar" icon="pi pi-trash" actionListener="#{empleadoC.eliminar()}" update=":form2:tablaEmp msgEmpleado" style="color:black; font-weight:bold; font-size:15px">
+                            <p:confirm header="Confirmación" message="¿Deseas eliminar?" icon="pi pi-trash"/>
+                        </p:menuitem>
+                        <p:menuitem value="Restaurar" icon="pi pi-user-plus" actionListener="#{empleadoC.restaurar()}" update=":form2:tablaEmp msgEmpleado" style="color:black; font-weight:bold; font-size:15px">
+                            <p:confirm header="Confirmación" message="¿Deseas Restaurar?" icon="pi pi-user-plus"/>
+                        </p:menuitem>
+                        <p:menuitem icon="pi pi-briefcase" value="Registrar Producto" outcome="/vistas/Productos" style="color:black; font-weight:bold; font-size:14px"/>
+                        <p:menuitem icon="pi pi-shopping-cart" value="Registrar Venta" outcome="/vistas/Ventas" style="color:black; font-weight:bold; font-size:14px"/>
+                    </p:contextMenu>
+                </h:form>
+            </div>
+            <!-- Tabla de empleados: Final -->
+            <!-- Dialog Modificar empleado: Inicio -->
+            <h:form id="form3">
+                <center>
+                    <p:dialog id="dlgDatos" header="DATOS DEL EMPLEADO" widgetVar="wdlgModificar" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false" minimizable="false" maximizable="false">
+                        <p:panelGrid columns="3" styleClass="ui-noborder">
+                            <p:outputLabel value="DNI: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="txtDNIEMP" value="#{empleadoC.empleado.DNIEMP}" placeholder="Nº de DNI"
+                                         maxlength="8" style="width:270px;">
+                                <p:keyFilter regEx="/[0-9]/"/>
+                            </p:inputText>
+                            <p:message id="msgDNIEMP" for="txtDNIEMP"/>
+
+                            <p:outputLabel value="Nombres: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="txtNOMEMP" value="#{empleadoC.empleado.NOMEMP}" placeholder="Nombres"
+                                         maxlength="50" style="width:270px;">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                            </p:inputText>
+                            <p:message id="msgNOMEMP" for="txtNOMEMP"/>
+
+                            <p:outputLabel value="Apellidos: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="txtAPEEMP" value="#{empleadoC.empleado.APEEMP}" placeholder="Apellidos"
+                                         maxlength="50" style="width:270px;">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                            </p:inputText>
+                            <p:message id="msgAPEEMP" for="txtAPEEMP"/>
+
+                            <p:outputLabel value="Correo: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="txtEMAEMP" value="#{empleadoC.empleado.EMAEMP}" placeholder="Correo electrónico"
+                                         maxlength="50" style="width:270px;">
+                                <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0-9_._@]/"/>
+                            </p:inputText>
+                            <p:message id="msgEMAEMP" for="txtEMAEMP"/>
+
+                            <p:outputLabel value="Celular: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:inputText id="txtCELEMP" value="#{empleadoC.empleado.CELEMP}" placeholder="Nº de celular"
+                                         maxlength="9" style="width:270px;">
+                                <p:keyFilter regEx="/[0-9]/"/>
+                            </p:inputText>
+                            <p:message id="msgCELEMP" for="txtCELEMP"/>
+
+                            <p:outputLabel value="Rol: " style="color:black; font-weight:bold; font-size:16px"/>
+                            <p:selectOneMenu id="txtROLEMP" value="#{empleadoC.empleado.ROLEMP}">
+                                <f:selectItem noSelectionOption="true" itemLabel="Rol"/>
+                                <f:selectItem itemValue="A" itemLabel="Administrador"/>
+                                <f:selectItem itemValue="T" itemLabel="Trabajador"/>
+                            </p:selectOneMenu>
+                            <p:message id="msgROLEMP" for="txtROLEMP"/>
+
+                            <p:commandButton  value="Modificar" actionListener="#{empleadoC.modificar()}" icon="pi pi-pencil"
+                                              disabled="false" update=":form2:tablaEmp msgEmpleado" style="font-weight:bold; font-size:16px">
+                                <p:confirm header="Confirmación" type="popup" message="¿Deseas Registrar?" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" immediate="true" oncomplete="PF('wdlgModificar').hide();" style="font-weight:bold; font-size:16px"/>
+                        </p:panelGrid>
+                    </p:dialog>
+                </center>
+            </h:form>
+            <h:form id="form4">
+                <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                </p:confirmPopup>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                </p:confirmDialog>
+            </h:form>
+            <!-- Dialog Modificar empleado: Final -->
+            <script type="text/javascript" src="./js/Dni.js"></script>
+        </h:body>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./Plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="content">
+        <h:head>
+            <f:event type="preRenderView" listener="#{usuarioC.seguridadSesion()}"/>
+        </h:head>
+        <h:body>
+            <h:form>
+                <style type="text/css">
+                    .imagebox a {
+                        margin-left: 15px;
+                    }
+                    panel .my-heading-row {
+                        background-color: brown;
+                        font-weight: bold;
+                    }
+                </style>
+                <center>
+                    <p:graphicImage name="images/Conflomark.png" style="width:20%;height:30%;"/>
+                    <P/>
+                    <p:graphicImage name="images/Logo.png" style="width:30%;height:10%;"/>   
+                    <p:panelGrid columns="3" layout="grid" styleClass="showcase-text-align-center" columnClasses="p-col-12 p-md-6 p-lg-3, p-col-12 p-md-6 p-lg-3, p-col-12 p-md-6 p-lg-3, p-col-12 p-md-6 p-lg-3">
+                        <p:card style="width:25em; background:skyblue;">
+                            <p:linkButton value="REGISTRAR" outcome="/vistas/Clientes" icon="pi pi-user-plus" style="font-size:25px; font-weight:bold"/>
+                            <f:facet name="header">
+                                <h1 style="color:black; font-weight:bold; font-size:40px">CLIENTES</h1>
+                            </f:facet>
+                            <f:facet name="footer">
+                                <p:graphicImage name="images/Clientes.jpg" style="width:300px;height:250px;"/>
+                            </f:facet>
+                        </p:card>
+                        <p:card style="width:25em ;background:skyblue;">
+                            <p:linkButton value="REGISTRAR" outcome="/vistas/Productos" icon="pi pi-briefcase" style="font-size:25px; font-weight:bold"/>
+                            <f:facet name="header">
+                                <h1 style="color:black; font-weight:bold; font-size:40px">PRODUCTOS</h1>
+                            </f:facet>
+                            <f:facet name="footer">
+                                <p:graphicImage name="images/Productos.jpg" style="width:300px;height:250px;"/>
+                            </f:facet>
+                        </p:card>
+                        <p:card style="width:25em ;background:skyblue;">
+                            <p:linkButton value="REGISTRAR" outcome="/vistas/Ventas" icon="pi pi-shopping-cart" style="font-size:25px; font-weight:bold"/>
+                            <f:facet name="header">
+                                <h1 style="color:black; font-weight:bold; font-size:40px">VENTAS</h1>
+                            </f:facet>
+                            <f:facet name="footer">
+                                <p:graphicImage name="images/Ventas.jpg" style="width:300px;height:250px;"/>
+                            </f:facet>
+                        </p:card>
+                    </p:panelGrid>
+                </center>
+            </h:form>
+        </h:body>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>CONFLOMARK</title>
+        <link rel="icon" type="image/png" href="resources/images/carrito.png"/>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="./resources/css/login.css"/>
+        <script type="text/javascript" src="./resources/js/validator.js"></script>
+    </h:head>
+    <p:growl id="mensajes" severity="info,fatal,warn,error" showSummary="true" showDetail="true"/>
+
+    <h:body id="body">
+        <style>
+            a:link{color:red}
+            a:hover{color:blue}
+            a:visited{color:blue}
+        </style>
+        <div class="container">
+            <div class="forms-container">
+                <div class="signin-signup">
+                    <h:form id="fmrIngresar" class="sign-in-form" prependId="false">
+                        <img src="./resources/images/Conflomark.png" class="image" alt="" style="width:60%; height:40%;"/>
+                        <h1 class="title" style="color:black; font-weight:bold; font-size:40px">¡BIENVENIDO!</h1>
+                        <h1 class="title" style="color:black; font-weight:bold; font-size:20px">Sistema de Ventas para Minimarket</h1>
+                        <div class="page-links">
+                            <a class="active">Iniciar Sesión</a> | <a href="/Conflomark_ODAO/faces/Registrar.xhtml">Registrarse</a> | <a href="/Conflomark_ODAO/faces/Comentario.xhtml">Ayuda</a>
+                        </div>
+                        <div class="input-field">
+                            <i class="fas fa-user"></i>
+                            <p:inputText id="usuario" value="#{usuarioC.usuario.USUUSU}" placeholder="Usuario" required="true" requiredMessage="Ingrese el Usuario">
+                                <p:tooltip for="usuario" value="Ingrese el Usuario" trackMouse="focus"/>
+                            </p:inputText>
+                        </div>
+                        <div class="input-field">
+                            <i class="fas fa-lock"></i>
+                            <p:password id="pass" value="#{usuarioC.usuario.PWDUSU}" placeholder="Contraseña" required="true" requiredMessage="Ingrese la Contraseña" feedback="true" weakLabel="Débil" goodLabel="Bueno" strongLabel="Seguro">
+                                <p:tooltip for="pass" value="Ingrese el Passsword" trackMouse="focus"/>
+                            </p:password>
+                        </div>
+                        <p:captcha label="Captcha" requiredMessage="Falta verificar Captcha" rendered="#{usuarioC.captcha == 1 eq true}"/>
+                        <p:commandButton id="btnlogin" actionListener="#{usuarioC.iniciarSesion()}"
+                                         value="INICIAR SESIÓN" update="fmrIngresar,:mensajes,btnlogin usuario pass"
+                                         onstart="if(#{usuarioC.bloquear}){PF('widgetBlock').show()}"
+                                         oncomplete="PF('widgetBlock').hide()" icon="pi pi-check-circle"
+                                         class="boton" style="font-weight:bold; font-size:20px">
+                        </p:commandButton>
+                        <br/>
+                        <p:linkButton value="AYUDA" outcome="Comentario" icon="pi pi-comments" style="font-size:20px; font-weight:bold"/>
+                        <p:blockUI block="body" widgetVar="widgetBlock">
+                            <p:graphicImage value="resources/images/tiempo_cinco.gif"></p:graphicImage>
+                        </p:blockUI>
+                    </h:form>
+
+                    <h:form id="frmRegistrar" class="sign-up-form" prependId="false">
+                        <img src="./resources/images/Conflomark.png" class="image" alt="" style="width:60%; height:40%;"/>
+                        <h1 class="title" style="color:black; font-weight:bold; font-size:40px">RESTABLECER CONTRASEÑA</h1>
+                        <h1 class="title" style="color:black; font-weight:bold; font-size:18px">Escribe aqui tu email para enviarte una nueva contraseña</h1>
+                        <center>
+                            <div class="input-field">
+                                <i class="pi pi-envelope"></i>
+                                <p:inputText id="email" value="#{usuarioC.usuario.EMAIL}" placeholder="Email" style="width:450px;" required="true" requiredMessage="Ingrese el Email">
+                                </p:inputText>
+                            </div>
+                            <p:panelGrid columns="1" styleClass="ui-noborder">
+                                <p:commandButton id="enviar" value="ENVIAR EMAIL" actionListener="#{usuarioC.modificarPwdGeneral()}" icon="pi pi-envelope" 
+                                                 disabled="false" style="font-weight:bold; font-size:20px" widgetVar="btnemail" update="email mensajes">
+                                    <p:confirm header="Confirmación" type="popup" message="¿Deseas Enviar?" icon="pi pi-question"/>
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </center>
+                    </h:form>
+
+                    <h:form>
+                        <p:confirmPopup style="margin: initial" global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" icon="pi pi-check" async="true"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no" icon="pi pi-times"/>
+                        </p:confirmPopup>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                        </p:confirmDialog>
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="panels-container">
+                <div class="panel left-panel">
+                    <div class="content">
+                        <h3>¿Olvidaste tu Contraseña?</h3>
+                        <p>Te podemos ayudar a restablecer tu contraseña</p>
+                        <button class="btn transparent" id="sign-up-btn">OLVIDE MI CONTRASEÑA</button>
+                    </div>
+                    <img src="./resources/images/registrarse.svg" class="image" alt=""/>
+                </div>
+
+                <div class="panel right-panel">
+                    <div class="content">
+                        <h3>¿Eres un usuario?</h3>
+                        <p>Si lo eres haz clic en Iniciar Sesión</p>
+                        <button class="btn transparent" id="sign-in-btn">INICIAR SESIÓN</button>
+                    </div>
+                    <img src="./resources/images/sesion.svg" class="image" alt=""/>
+                </div>
+            </div>
+        </div>
+        <script src="./resources/js/login.js"></script>
+    </h:body>
+
+</html>
